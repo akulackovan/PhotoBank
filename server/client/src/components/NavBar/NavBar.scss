@@ -1,0 +1,25 @@
+.navbar
+{
+   background-color: #6d9ea3ff;
+   color: #f3f2ef;
+   padding-left: 20 px;
+   .photobank{ 
+    font-size: 35px;
+    
+    font-weight: 1000;
+   }
+   .listHeader{
+    font-size: 20px;
+    
+    font-weight: 900;
+    }
+
+    .search{
+        float: right;
+        background-color: #fcfcfc85;
+        opacity: 20;
+        color: #48523d;
+        font-weight: 900;
+        width: 50 px;
+        }
+}
