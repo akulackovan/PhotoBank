@@ -20,7 +20,6 @@ const NavBar = () => {
                                 name="s" 
                             />
                         </form>
-
                         </li>
                     </ul>
                 </div> 
