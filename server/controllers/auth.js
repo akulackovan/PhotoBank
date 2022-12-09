@@ -99,6 +99,6 @@ export const getMe = async (req, res) => {
             message: 'Профиль успешен =)',
         })
     } catch (error) {
-        res.status(401).json({message: 'Нет доступа.'})
+        res.status(401).json({message: 'Нет доступа'})
     }
 }

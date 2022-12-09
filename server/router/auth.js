@@ -1,10 +1,11 @@
 import {Router} from "express"
 import {getMe, login, register} from '../controllers/auth.js'
+import {checkAuth} from "../utils/checkAuth";
 
 const router = new Router()
 
 router.post('/reg', register)
 router.post('/login', login)
-router.get('/profile', getMe)
+router.get('/profile',checkAuth, getMe)
 
 export default router
