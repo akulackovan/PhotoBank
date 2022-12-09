@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import cors from 'cors'
+import authRoute from './router/auth.js'
 
 const app = express()
 dotenv.config()
@@ -14,9 +15,7 @@ const DB_NAME = process.env.DB_NAME
 app.use(cors())
 app.use(express.json())
 
-// app.get('/', (req, res) => {
-//     return res.json({message: 'OK'})
-// })
+app.use('/auth', authRoute)
 
 async function init() {
     try {
