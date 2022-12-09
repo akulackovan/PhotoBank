@@ -3,7 +3,8 @@ import mongoose from 'mongoose'
 const PostSchema = new mongoose.Schema(
     {
         author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-        city: {type: mongoose.Schema.Types.ObjectId, ref: 'City'},
+        //TODO: city: {type: mongoose.Schema.Types.ObjectId, ref: 'City'},
+        city: {type: String},
         image: {type: Buffer},
         text: {type: String, required: true},
         imgUrl: {type: String, default: ''},

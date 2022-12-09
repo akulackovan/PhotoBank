@@ -16,11 +16,12 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/auth', authRoute)
+// app.use('/posts', postRoute)
 
 async function init() {
     try {
         await mongoose.connect(
-            `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_NAME}.qidx0uu.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,
+            `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_NAME}.qidx0uu.mongodb.net/?retryWrites=true&w=majority`,
         )
 
         app.listen(PORT, () => {
@@ -32,4 +33,4 @@ async function init() {
 }
 
 init()
-//
+
