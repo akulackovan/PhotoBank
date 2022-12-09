@@ -1,4 +1,4 @@
-import User from '../../../../../project/youtube-src-main/server/models/User.js'
+import User from 'server/models/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 

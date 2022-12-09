@@ -1,6 +1,11 @@
 {
-  "name": "youtube-src-main",
+  "name": "server",
   "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.18.2",
