@@ -1,7 +1,7 @@
 import React from "react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import "./App.scss";
-import RegPage from "./pages/RegPage"
+import RegPage from "./pages/RegPage/RegPage"
 import NavBar from "./components/NavBar/NavBar"
 
 function App() {
