@@ -1,9 +1,8 @@
 import React from 'react'
-import './AuthPage.scss'
 
 const AuthPage = () => {
     return (
-        <div className='box'>
+        <div className='auth'>
             <div className='center auth-page'>
                 <h3>ФОТОБАНК</h3>
                 <input
