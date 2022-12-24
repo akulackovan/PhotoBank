@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from "react-router-dom"
+import './AuthPage.scss'
 
 const AuthPage = () => {
     return (
@@ -17,8 +19,10 @@ const AuthPage = () => {
                     placeholder="Пароль"
                     name="user"
                 />
-                <button>ВОЙТИ</button>
-                <button>РЕГИСТРАЦИЯ</button>
+                <div className='regButton'>
+                    <button>ВОЙТИ</button>
+                    <Link to="/reg"><button>РЕГИСТРАЦИЯ</button></Link>
+                </div>
             </div>
         </div>
     )
