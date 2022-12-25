@@ -1,17 +1,29 @@
 import User from '../models/User.js'
 import City from '../models/City.js'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 
 export const settings = async (req, res) => {
     try {
-        const {userId, password, newpass, checkpass, text, city} = req.body
+        const {userId, username, password, newpass, checkpass, text, city} = req.body
         const user = await User.findOne({userId})
         if (!user) {
             return res.status(404).json({
                 message: 'Такого пользователя не существует.',
             })
         }
+        if (username != '')
+        {
+            const isUsed = await User.findOne({username})
+            if (isUsed) {
+                return res.status(409).json({
+                message: 'Логин занят. Выберите другой',
+                })
+            }
+            user.username = username
+        }
+
         if (password != '')
         {
             const isPasswordCorrect = await bcrypt.compare(password, user.password)
