@@ -1,24 +1,22 @@
 import React from "react"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import "./App.scss";
-import RegPage from "./pages/RegPage/RegPage"
-import AuthPage from "./pages/AuthPage/AuthPage"
-import NavBar from "./components/NavBar/NavBar"
+import {useRoutes} from './routes'
+import {AuthContext} from './context/AuthContext'
+import {useAuth} from './hooks/auth.hook'
 
 function App() {
+  const {login, logout, token, userId, isReady} = useAuth()
+  const isLogin = !!token
+  const routes = useRoutes(isLogin)
   return (
-    <Router>
-      <div className="App">
-        <Switch>
-          <Route exact path='/reg' component={RegPage}>
-            <RegPage />
-          </Route>
-          <Route exact path='/auth' component={RegPage}>
-            <AuthPage />
-          </Route>
-        </Switch>
+    <AuthContext.Provider value= {{login, logout, token, userId, isReady, isLogin}}>
+      <div className="app">
+        <Router  forceRefresh={true}>
+            { routes }
+        </Router>
       </div>
-    </Router>
+    </AuthContext.Provider>
   );
 }
 
