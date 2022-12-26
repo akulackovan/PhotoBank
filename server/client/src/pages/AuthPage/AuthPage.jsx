@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import { Link, Redirect } from "react-router-dom"
+import { Redirect } from "react-router-dom"
 import axios from 'axios'
 import './AuthPage.scss'
 import { AuthContext } from '../../context/AuthContext'
@@ -14,6 +14,10 @@ const AuthPage = () => {
     )
     const [errorMessage, setErrorMessage] = React.useState("");
     const [redirect, setRedirect] = React.useState(false);
+    const [token, setToken] = React.useState("");
+    const [userId, setUserID] = React.useState("");
+    const [authRed, setAuthRed] = React.useState(false);
+    
     const changeForm = (event) => {
         setForm({...form, [event.target.name]: event.target.value})
         console.log(form)
@@ -32,7 +36,15 @@ const AuthPage = () => {
                 }
             })
             .then(response => 
-                login(response.data.token, response.data.user._id))
+                {
+                setAuthRed(true)
+                
+                console.log(authRed)
+                console.log("authRed")
+                console.log("RES")  
+                setToken(response.data.token)
+                setUserID(response.data.user._id)              
+        })
         }
         catch (error) {
             console.log(error)
@@ -42,6 +54,15 @@ const AuthPage = () => {
 
     const handleOnClick = async () => {
         setRedirect(true)
+    }
+    console.log(authRed)
+    console.log("authRed")
+    if (authRed)
+    {
+        login(token, userId)
+        return(
+            <Redirect to='/popular'/>
+        )
     }
 
     return (
