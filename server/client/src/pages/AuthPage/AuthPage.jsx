@@ -67,25 +67,25 @@ const AuthPage = () => {
 
     return (
         <div className='auth'>
-            <div className='center auth-page'>
-                <h3>ФОТОБАНК</h3>
+            <div className='center back'>
+                <h3 className="head">ФОТОБАНК</h3>
                 <input
-                    className="login"
+                    className="input"
                     type="text"
                     placeholder="Логин" 
                     name="username"
                     onChange={changeForm}
                 />
                 <input
-                    className="pass"
+                    className="input"
                     type="text"
                     placeholder="Пароль"
                     name="password"
                     onChange={changeForm}
                 />
-                    <button
+                    <button className='button'
                     onClick={authHandler}>ВОЙТИ</button>
-                    <button onClick={handleOnClick}>РЕГИСТРАЦИЯ</button>
+                    <button className='button' onClick={handleOnClick}>РЕГИСТРАЦИЯ</button>
                     {errorMessage && <div className="error"> {errorMessage} </div>}
                     {redirect && <Redirect to='/reg'/>}
             </div>
