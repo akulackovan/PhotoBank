@@ -1,27 +1,24 @@
-.auth
-{
-    
-    .back
-    {
-        width: 400px;
-        height: 400px;
-        .input {
-            margin-top: 2%;
-            width: 80%;
-            padding-left: 2%;
-            background-color: #eceeeb;
-            font-weight: 900;
-            border: none;
-            border-radius: 10px;
-        }
-    }    
+.auth {
+  .back {
+    width: 400px;
+    height: 400px;
+
+    .input {
+      margin-top: 2%;
+      width: 80%;
+      padding-left: 2%;
+      background-color: #eceeeb;
+      font-weight: 900;
+      border: none;
+      border-radius: 10px;
+    }
+  }
 }
 
 .auth button {
-    margin-top: 5%;
-    width: 90%;
-    height: 10%;
-    font-size: 25px;
-    font-weight: 700;
+  margin-top: 5%;
+  width: 90%;
+  height: 10%;
+  font-size: 25px;
+  font-weight: 700;
 }
-

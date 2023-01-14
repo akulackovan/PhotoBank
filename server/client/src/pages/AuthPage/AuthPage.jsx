@@ -1,8 +1,8 @@
 import React, {useState, useContext} from 'react'
-import { Redirect } from "react-router-dom"
+import {Redirect} from "react-router-dom"
 import axios from 'axios'
 import './AuthPage.scss'
-import { AuthContext } from '../../context/AuthContext'
+import {AuthContext} from '../../context/AuthContext'
 
 const AuthPage = () => {
 
@@ -17,36 +17,33 @@ const AuthPage = () => {
     const [token, setToken] = React.useState("");
     const [userId, setUserID] = React.useState("");
     const [authRed, setAuthRed] = React.useState(false);
-    
+
     const changeForm = (event) => {
         setForm({...form, [event.target.name]: event.target.value})
         console.log(form)
     }
 
-    const { login } = useContext(AuthContext)
+    const {login} = useContext(AuthContext)
 
 
-    const authHandler = async () =>
-    {
+    const authHandler = async () => {
         try {
             await axios.post('/auth/login', {...form}, {
                 headers:
-                {
-                    'Context-Type': 'application/json'
-                }
+                    {
+                        'Context-Type': 'application/json'
+                    }
             })
-            .then(response => 
-                {
-                setAuthRed(true)
-                
-                console.log(authRed)
-                console.log("authRed")
-                console.log("RES")  
-                setToken(response.data.token)
-                setUserID(response.data.user._id)              
-        })
-        }
-        catch (error) {
+                .then(response => {
+                    setAuthRed(true)
+
+                    console.log(authRed)
+                    console.log("authRed")
+                    console.log("RES")
+                    setToken(response.data.token)
+                    setUserID(response.data.user._id)
+                })
+        } catch (error) {
             console.log(error)
             setErrorMessage(error.response.data.message)
         }
@@ -57,10 +54,9 @@ const AuthPage = () => {
     }
     console.log(authRed)
     console.log("authRed")
-    if (authRed)
-    {
+    if (authRed) {
         login(token, userId)
-        return(
+        return (
             <Redirect to='/popular'/>
         )
     }
@@ -72,7 +68,7 @@ const AuthPage = () => {
                 <input
                     className="input"
                     type="text"
-                    placeholder="Логин" 
+                    placeholder="Логин"
                     name="username"
                     onChange={changeForm}
                 />
@@ -83,11 +79,12 @@ const AuthPage = () => {
                     name="password"
                     onChange={changeForm}
                 />
-                    <button className='button'
-                    onClick={authHandler}>ВОЙТИ</button>
-                    <button className='button' onClick={handleOnClick}>РЕГИСТРАЦИЯ</button>
-                    {errorMessage && <div className="error"> {errorMessage} </div>}
-                    {redirect && <Redirect to='/reg'/>}
+                <button className='button'
+                        onClick={authHandler}>ВОЙТИ
+                </button>
+                <button className='button' onClick={handleOnClick}>РЕГИСТРАЦИЯ</button>
+                {errorMessage && <div className="error"> {errorMessage} </div>}
+                {redirect && <Redirect to='/reg'/>}
             </div>
         </div>
     )
