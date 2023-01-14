@@ -87,7 +87,7 @@ const SettingsPage = () => {
             <Redirect to="/auth"/>
         )
     }
-    
+
     return (
         <div className='settings'>
             <div className='back'>
