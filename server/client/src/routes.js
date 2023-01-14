@@ -22,7 +22,6 @@ export const useRoutes = (isLogin) => {
                     <Route exact path='/profile' component={ProfilePage}/>
                     <Route exact path='/addpost' component={AddPostPage}/>
                     <Route exact path='/subsc' component={SubscribePage}/>
-
                     <Route exact path='/test' component={Test}/>
                 </Switch>
             </div>
