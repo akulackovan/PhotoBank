@@ -16,7 +16,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/auth', authRoute)
-// app.use('/posts', postRoute)
+app.use('/settings', settingRoute)
 
 async function init() {
     try {
@@ -33,4 +33,3 @@ async function init() {
 }
 
 init()
-
