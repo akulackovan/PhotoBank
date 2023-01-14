@@ -1,4 +1,4 @@
-import Post from '../../../../../project/youtube-src-main/server/models/Post.js'
+import Post from '../models/Post.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
