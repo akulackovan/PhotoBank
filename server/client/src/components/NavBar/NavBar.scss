@@ -1,25 +1,35 @@
-.navbar
-{
-   background-color: #6d9ea3ff;
-   color: #f3f2ef;
-   padding-left: 20 px;
-   .photobank{ 
-    font-size: 35px;
-    
-    font-weight: 1000;
-   }
-   .listHeader{
-    
-    font-size: 20px;
-    
-    font-weight: 900;
-    }
+.navbar {
+  background-color: #6d9ea3ff;
+  color: #f3f2ef;
+  padding-left: 2%;
 
-    .search{
-        float: right;
-        color: #48523d;
-        background-color: rgba(252, 252, 252, 0.2);
-        font-weight: 900;
-        width: 30 px;
-        }
+  .photobank {
+    font-size: 35px;
+    font-weight: 1000;
+  }
+
+  .list {
+    padding-left: 17%;
+
+    .listHeader {
+      font-size: 150%;
+      font-weight: 900;
+    }
+  }
+
+  .search {
+    padding-left: 65%;
+    font-size: 20px;
+    height: 70%;
+
+    .input {
+      width: 30%;
+      padding-left: 2%;
+      background-color: rgba(252, 252, 252, 0.2);
+      font-weight: 900;
+      color: #48523d;
+      border: none;
+      border-radius: 10px;
+    }
+  }
 }
