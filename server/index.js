@@ -8,8 +8,6 @@ import cors from 'cors'
 const PORT = process.env.PORT || 3000
 const app = express()
 
-
-
 app.use(cors());
 
 app.use(express.json())
@@ -25,14 +23,12 @@ async function init() {
         app.listen(PORT, () => {
             console.log("Start server on port ${PORT}")
         })
-
     }
     catch(err)
     {
         console.error(err)
     }
 }
-
 
 dotenv.config()
 
