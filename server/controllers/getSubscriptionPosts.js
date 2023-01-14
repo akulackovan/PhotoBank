@@ -6,7 +6,7 @@ export const getSubscriptionPosts = async (req, res) => {
         const user = await User.findOne({userId});
         if (!user) {
             return res.status(404).json({
-                message: 'Такого пользователя не существует.',
+                message: 'Такого пользователя не существует',
             });
         }
         const [subscriptions] = user.subscriptions;
@@ -20,7 +20,7 @@ export const getSubscriptionPosts = async (req, res) => {
         returnedPosts.sort(sortByDate());
         return returnedPosts;
     } catch {
-        res.status(400).json({message: 'Ошибка при получении постов.'});
+        res.status(402).json({message: 'Ошибка при получении подписных постов'});
     }
 };
 

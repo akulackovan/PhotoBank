@@ -4,8 +4,8 @@ export const createPost = async (req, res) => {
     try {
         const {data, image, city} = req.body;
         if (!data || !image || !city) {
-            return res.status(404).json({
-                message: 'Ошибка в получении данных.',
+            return res.status(400).json({
+                message: 'Ошибка при создании поста',
             });
         }
         const newPost = new Post({
@@ -17,21 +17,27 @@ export const createPost = async (req, res) => {
             likes: 0,
         });
         await newPost.save();
-        res.json({
+        res.status(201).json({
             newPost,
-            message: 'Добавлен пост.',
+            message: 'Успешно созданный пост',
         });
     } catch {
-        res.json({message: 'Ошибка при создании нового поста.'});
+        res.status(400).json({message: 'Ошибка при создании поста'});
     }
 };
 
 export const deletePost = async (req, res) => {
     try {
         const {postId} = req.body;
+        const post = await Post.findOne({postId});
+        if (!post) {
+            return res.status(404).json({
+                message: 'Такого поста не существует',
+            });
+        }
         await Post.deleteOne(postId);
-        res.json({message: 'Пост удален'});
+        res.status(204).json({message: 'Пост был удален'});
     } catch {
-        res.json({message: 'Ошибка при удалении поста'});
+        res.status(400).json({message: 'Ошибка при удалении поста'});
     }
 };
