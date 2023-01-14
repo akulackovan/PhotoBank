@@ -8,5 +8,4 @@ router.get('/post',) //получение всех постов
 
 router.get('/post/me',) //получение всех постов пользователя
 
-
 export default router
