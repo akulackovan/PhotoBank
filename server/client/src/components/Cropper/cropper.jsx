@@ -1,8 +1,12 @@
+import { set } from 'mongoose'
 import React, { useState } from 'react'
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import 'react-image-crop/src/ReactCrop.scss'
 
+//Есть проблема в отображении. Окно обрезки и исходное не совпадают
+//Проблема как здесь 
+//https://stackoverflow.com/questions/63359279/cropped-image-smaller-than-crop-reactjs-react-image-crop
 
 const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
     const [info, setInfo] = useState({
@@ -21,6 +25,7 @@ const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
     const [image, setImage] = useState(null);
     const [output, setOutput] = useState(null);
     const [error, setErrorMessage] = useState(null)
+
 
     const selectImage = (e) => {
         console.log(e.target.files[0])
@@ -58,13 +63,23 @@ const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
         )
         const base64Image = canvas.toDataURL('image/jpeg')
         setOutput(base64Image)
+        
+        setImage(src)
+        setSrc(null)
         onChange(base64Image)
     };
+
+    const ChangeCrop = () => {
+        setOutput(null)
+        setSrc(image)
+
+    }
 
     return (
         <div className="App">
             <center>
                 <input
+                className='button'
                     type="file"
                     accept="image/*"
                     onChange={(e) => {
@@ -72,6 +87,7 @@ const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
                     }}
                     
                 />
+                
                 <br />
                 <br />
                 <div>
@@ -82,13 +98,15 @@ const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
                                 <img src={src} id="source" width={info.x} height={info.y}/>
                             </ReactCrop>
                             <br />
-                            <button className="button "onClick={cropImageNow}>Crop</button>
+                            <button className="button "onClick={cropImageNow}>Обрезать</button>
                             <br />
                             <br />
                         </div>
                     )}
                 </div>
-                <div>{output && <img src={output} />}</div>
+                {output && <div><img src={output} />
+                <button className="button "onClick={ChangeCrop}>Изменить область</button></div>}
+                
                 <div>{error}</div>
             </center>
         </div>
