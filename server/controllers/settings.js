@@ -7,71 +7,79 @@ import jwt from 'jsonwebtoken'
 export const settings = async (req, res) => {
     try {
         const {userId, username, password, newpass, checkpass, text, city} = req.body
-        const user = await User.findOne({userId})
+        const user = await User.findOne({_id: userId})
 
         if (!user) {
             return res.status(400).json({
-                message: 'Такого пользователя не существует'
+                message: 'Такого пользователя не существует.',
             })
         }
-        if (username != '') {
+        if (username != '')
+        {
             const isUsed = await User.findOne({username})
             if (isUsed) {
                 return res.status(400).json({
-                    message: 'Логин занят. Выберите другой'
+                message: 'Логин занят. Выберите другой',
                 })
             }
         }
 
-        if (password != '') {
+        if (password != '')
+        {
             const isPasswordCorrect = await bcrypt.compare(password, user.password)
             if (!isPasswordCorrect) {
                 return res.status(400).json({
-                    message: 'Неверный пароль'
+                    message: 'Неверный пароль.',
                 })
             }
-            if (newpass.localeCompare(checkpass) != 0) {
+            if (newpass.localeCompare(checkpass) != 0)
+            {
                 return res.status(400).json({
-                    message: 'Пароли не совпадают'
+                    message: 'Пароли не совпадают.',
                 })
-            }
+            } 
         }
-        if (text != '') {
-            if (text.length > 512) {
+        if (text != '')
+        {
+            if (text.length > 512)
+            {
                 return res.status(401).json({
-                    message: 'Описание пользователя содержит больше 512 символов'
+                    message: 'Описание пользователя содержит больше 512 символов.',
                 })
             }
         }
-        const isCity = await City.findOne({city})
+        const isCity= await City.findOne({id: city})
         if (city != '' && !isCity) {
             return res.status(400).json({
-                message: 'Такого города нет'
-            })
-        }
-
-        if (username != '') {
+                    message: 'Такого города нет',
+                })
+            }
+        
+        if (username != '')
+        {
             await User.updateOne({_id: userId}, {username: username})
         }
-        if (newpass != '' && password != '') {
+        if (newpass != '' && password != '')
+        { 
             const salt = bcrypt.genSaltSync(10)
             const hash = bcrypt.hashSync(newpass, salt)
             await User.updateOne({_id: userId}, {password: hash})
         }
-        if (text != '') {
+        if (text != '')
+        { 
             await User.updateOne({_id: userId}, {text: text})
         }
-        if (city != '') {
+        if (city != '')
+        {
             const idCity = isCity._id
-            await User.updateOne({_id: userId}, {city: idCity})
+            await User.updateOne({_id: userId}, {city: idCity})  
         }
 
-        return res.status(201).json({
-            message: 'Настройки изменены'
+        res.status(201).json({
+            message: 'Настройки изменены',
         })
     } catch (error) {
-        return res.status(400).json({
-            message: 'Ошибка при изменении настроек'
-        })
+        res.status(400).json({message: 'Ошибка при изменении настроек.'})
     }
 }
+
