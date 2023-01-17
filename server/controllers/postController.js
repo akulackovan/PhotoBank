@@ -1,18 +1,18 @@
-import Post from "../models/Post";
+import Post from "../models/Post.js";
 
 export const createPost = async (req, res) => {
     try {
-        const {data, image, city} = req.body;
-        if (!data || !image || !city) {
+        const {city, image, text} = req.body;
+        if (!city || !image || !text) {
             return res.status(400).json({
                 message: 'Ошибка при создании поста',
             });
         }
         const newPost = new Post({
-            User: req.authenticatorData.userId,
-            data: data,
-            image: image,
+            author: req.authenticatorData.userId,
             city: city,
+            image: image,
+            text: text,
             view: 0,
             likes: 0,
         });
