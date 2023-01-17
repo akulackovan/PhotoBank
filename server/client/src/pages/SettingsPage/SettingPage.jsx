@@ -1,14 +1,16 @@
-import React, {useContext, useState} from 'react'
-import {Link, Redirect} from "react-router-dom"
+import React, { useContext, useState } from 'react'
+import { Link, Redirect } from "react-router-dom"
 import axios from 'axios'
-import {AuthContext} from '../../context/AuthContext'
+import { AuthContext } from '../../context/AuthContext'
 import './SettingsPage.scss'
 import CityCombobox from '../../components/CityCombobox/CityCombobox'
+import { Gapped, Radio, RadioGroup } from '@skbkontur/react-ui';
+import { useTheme } from '../../hooks/use.theme'
 
 const SettingsPage = () => {
 
-    const {logout} = useContext(AuthContext)
-    const {userId} = useContext(AuthContext)
+    const { logout } = useContext(AuthContext)
+    const { userId } = useContext(AuthContext)
     const [form, setForm] = useState(
         {
             userId: userId,
@@ -24,12 +26,21 @@ const SettingsPage = () => {
     const [log, setLog] = React.useState(false)
 
     const changeForm = (event) => {
-        setForm({...form, [event.target.name]: event.target.value})
+        setForm({ ...form, [event.target.name]: event.target.value })
         console.log(form)
     }
 
     const changeOut = (event) => {
         setLog(true)
+    }
+
+    const now = localStorage.getItem('app-theme')
+    const [ newTheme, setNewTheme ] = useState(now)
+    const { theme, setTheme } = useTheme()
+
+    const changeTheme = (event) => {
+        setNewTheme(event.target.value)
+        console.log(newTheme)
     }
 
     const settingsHandler = async () => {
@@ -59,38 +70,40 @@ const SettingsPage = () => {
             return;
         }
         try {
-            await axios.post('/settings', {...form}, {
+            await axios.post('/settings', { ...form }, {
                 headers:
-                    {
-                        'Context-Type': 'application/json'
-                    }
+                {
+                    'Context-Type': 'application/json'
+                }
             })
                 .then(response => {
-                    console.log(response)
+                    console.log(newTheme)
+                    setTheme(newTheme)
                     setErrorMessage(response.data.message)
-                    form.username.value = ''
-                    document.getElementById("password").value = ''
-                    document.getElementById("newpass").value = ''
-                    document.getElementById("checkpass").value = ''
-                    document.getElementById("text").value = ''
-                    alert('alert')
+                    setTimeout(() => setErrorMessage(""), 2000)
                 })
-        } catch (error) {
+        }
+        catch (error) {
             console.log(error)
             setErrorMessage(error.response.data.message)
         }
     }
 
+
+
     if (log) {
         logout()
         return (
-            <Redirect to="/auth"/>
+            <Redirect to="/auth" />
         )
     }
 
+
+
+
     return (
         <div className='settings'>
-            <div className='back'>
+            <div className='container'>
                 <div className='rowC'>
                     <div className='first'>
                         <input
@@ -117,12 +130,12 @@ const SettingsPage = () => {
                         <input
                             className="input"
                             type="text"
-                            placeholder="Подтверждение пароля"
+                            placeholder="Подтверждение нового пароля"
                             name="checkpass"
                             onChange={changeForm}
                         />
                     </div>
-                    <div className='second' style={{textAlign: 'left'}}>
+                    <div className='second' style={{ textAlign: 'left' }}>
                         <input
                             className="input"
                             type="text"
@@ -130,16 +143,24 @@ const SettingsPage = () => {
                             name="text"
                             onChange={changeForm}
                         />
-                        <CityCombobox name='city'/>
+                        <CityCombobox name='city' onChange={(value) => setForm({...form, city: value})}/>
                     </div>
                 </div>
 
+                <div className='theme'>
+                    <RadioGroup name="number-complex" defaultValue={now}>
+                        <Gapped horizontal gap={0}>
+                            <b>Тема: </b>
+                            <Radio className ="radio" value="light" onChange={changeTheme}/> <b>Светлая</b>
+                            <Radio className ="radio" value="dark" onChange={changeTheme} /> <b>Темная</b>
+                        </Gapped>
+                    </RadioGroup>
+                </div>
+
                 <button className='button'
-                        onClick={settingsHandler}>СОХРАНИТЬ
-                </button>
+                    onClick={settingsHandler}>СОХРАНИТЬ</button>
                 <button className='button'
-                        onClick={changeOut}>ВЫЙТИ ИЗ АККАУНТА
-                </button>
+                    onClick={changeOut}>ВЫЙТИ ИЗ АККАУНТА</button>
                 {errorMessage && <div className="error"> {errorMessage} </div>}
             </div>
         </div>
