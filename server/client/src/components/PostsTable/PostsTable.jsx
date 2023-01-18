@@ -31,29 +31,25 @@ const PostTable = ({ id }) => {
         }
     }, []);
 
-/*                
-                    {post.map((option) => (
-                          <li><img style={{ width: 351, height: 262 }} src={`data:img/png;base64, ${option.image}`} /></li>
-                    
-                         
-                      ))} */
+
 
     return (
-	<div class="wrapper">
-		{post && <div className='gal'>
-        <div class="gallery">
-			<ul>
-<li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/53819/8.png" /></li>
-				<li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/53819/6.png" /></li>
-			</ul>
-		</div>
-        <div>
-        <h2 className='h2'>Фотографии закончились</h2>
+        <div class="wrapper">
+            {post && <div className='gal'>
+                <div class="gallery">
+                    <ul>
+                        {post.map((option) => (
+                            <li><img style={{ width: 351, height: 262 }} src={`data:img/png;base64, ${option.image}`} /></li>
+                        ))}
+                    </ul>
+                </div>
+                <div>
+                    <h2 className='h2'>Фотографии закончились</h2>
+                </div>
+            </div>}
         </div>
-        </div>}
-	</div>
-            
-        
+
+
     )
 }
 
