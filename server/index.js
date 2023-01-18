@@ -3,6 +3,9 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import authRoute from './router/auth.js'
+import settingRoute from './router/settings.js'
+import cityRoute from './router/city.js'
+import postRoute from './router/post.js'
 
 const app = express()
 dotenv.config()
@@ -17,6 +20,8 @@ app.use(express.json())
 
 app.use('/auth', authRoute)
 app.use('/settings', settingRoute)
+app.use('/post', postRoute)
+app.use('/city', cityRoute)
 
 async function init() {
     try {
