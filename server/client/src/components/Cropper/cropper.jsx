@@ -1,14 +1,13 @@
 import { set } from 'mongoose'
 import React, { useState } from 'react'
 import ReactCrop from 'react-image-crop'
+
 import 'react-image-crop/dist/ReactCrop.css'
 import 'react-image-crop/src/ReactCrop.scss'
 
-//Есть проблема в отображении. Окно обрезки и исходное не совпадают
-//Проблема как здесь 
-//https://stackoverflow.com/questions/63359279/cropped-image-smaller-than-crop-reactjs-react-image-crop
 
 const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
+
     const [info, setInfo] = useState({
         x: null,
         y: null,
@@ -28,17 +27,32 @@ const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
 
 
     const selectImage = (e) => {
-        console.log(e.target.files[0])
         const temp = URL.createObjectURL(e.target.files[0])
+        var img = new Image();
+        img.src = window.URL.createObjectURL( e.target.files[0] );
+        img.onload = function() {
+            var width = img.naturalWidth,
+                height = img.naturalHeight;
 
-        
-        if (e.target.files[0].size > 7340032
-            || temp.naturalWidth < 480 || temp.naturalHeight < 480) {
+            window.URL.revokeObjectURL( img.src );
+
+            if( width < 480 && height < 480 ) {
+                setErrorMessage("Загружаемое фото пользователя должно быть не больше 7 Мб и иметь разрешение от 480х480")
+                return
+            }
+            setInfo({x: width, y: height})
+        }
+        if (e.target.files[0].size > 7340032) {
             setErrorMessage("Загружаемое фото пользователя должно быть не больше 7 Мб и иметь разрешение от 480х480")
             return
         }
-        setInfo({x: temp.naturalWidth, y: temp.naturalHeight, type: e.target.files[0].type})
+        console.log(e.target.files[0].type)
+        setInfo({...info, type: e.target.files[0].type })
+        console.log(info)
         setSrc(temp)
+        setErrorMessage(null)
+        setOutput(null)
+
     };
 
     const cropImageNow = () => {
@@ -47,8 +61,6 @@ const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
         canvas.height = crop.height
         const ctx = canvas.getContext('2d')
         const image = document.getElementById("source")
-
-        console.log(image)
 
         ctx.drawImage(
             image,
@@ -61,12 +73,19 @@ const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
             crop.width,
             crop.height,
         )
-        const base64Image = canvas.toDataURL('image/jpeg')
+        const base64Image = canvas.toDataURL(info.type)
         setOutput(base64Image)
-        
         setImage(src)
         setSrc(null)
-        onChange(base64Image)
+        var arrayOfStrings = base64Image.split('base64,')
+        onChange({
+            base64: arrayOfStrings[1],
+            type: info.type
+        })
+    };
+
+    const onLoadImg = ({ target: img }) => {
+        setInfo({ x: img.width, y: img.height })
     };
 
     const ChangeCrop = () => {
@@ -79,34 +98,35 @@ const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
         <div className="App">
             <center>
                 <input
-                className='button'
+                    className='button'
                     type="file"
                     accept="image/*"
                     onChange={(e) => {
                         selectImage(e);
                     }}
-                    
+
                 />
-                
+
                 <br />
                 <br />
                 <div>
                     {src && (
                         <div>
                             <ReactCrop src={src} onImageLoaded={setImage}
-                                crop={crop} onChange={setCrop} locked='true'>
-                                <img src={src} id="source" width={info.x} height={info.y}/>
+                                crop={crop} onChange={setCrop} locked='true'
+                                zoomable={false}>
+                                <img src={src} id="source" width={info.x} height={info.y} onChange={onLoadImg} />
                             </ReactCrop>
                             <br />
-                            <button className="button "onClick={cropImageNow}>Обрезать</button>
+                            <button className="button " onClick={cropImageNow}>Обрезать</button>
                             <br />
                             <br />
                         </div>
                     )}
                 </div>
                 {output && <div><img src={output} />
-                <button className="button "onClick={ChangeCrop}>Изменить область</button></div>}
-                
+                    <button className="button " onClick={ChangeCrop}>Изменить область</button></div>}
+
                 <div>{error}</div>
             </center>
         </div>
