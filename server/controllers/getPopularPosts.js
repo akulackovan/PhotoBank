@@ -10,7 +10,7 @@ export const getPopular = async (req, res) => {
                 message: 'Такого пользователя не существует',
             });
         }
-        const city = await User.findOne({user});
+        const city = user.city;
         if (!city) {
             return res.status(404).json({
                 message: 'Ошибка в получении города пользователя',
@@ -22,14 +22,15 @@ export const getPopular = async (req, res) => {
                 message: 'Ошибка в получении постов данного города',
             });
         }
-        posts.sort(sortByViews());
+        posts.sort(sortByDateAndViews());
         return posts;
     } catch {
         res.status(400).json({message: 'Ошибка при получении популярных постов'});
     }
 };
 
-function sortByViews(first, second) {
-    return first.view - second.view;
+function sortByDateAndViews(first, second) {
+    return new Date(first.timestamps).setHours(0,0,0,0) == new Date(second.timestamps).setHours(0,0,0,0) ?
+        first.views - second.views : first.timestamps - second.timestamps;
     // todo или return second.view - first.view;
 }
