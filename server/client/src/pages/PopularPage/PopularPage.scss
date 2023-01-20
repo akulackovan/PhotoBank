@@ -1,18 +1,33 @@
-.row {
+.gal1{
     display: flex;
-    flex-wrap: wrap;
-    padding: 0 200px;
-    .column {
-        width: 30%;
-        flex: 33%;
-        padding: 0 4px;
-    }
-
-    .column img {
-        width: 400px;
-        margin-top: 40px;
-        vertical-align: middle;
-    }
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 5%;
+    text-align: center;
 }
 
-/* Create three equal columns that sits next to each other */
+div.gallery1 {
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+div.gallery1 ul {
+    list-style-type: none;
+    margin-left: 35px;
+}
+
+div.gallery1 ul li {
+    position: relative;
+    float: left;
+    width: 400px;
+    height: 300px;
+    margin: 10px;
+    padding: 5px;
+    z-index: 0;
+}
+
+
+/* Responsive hack */

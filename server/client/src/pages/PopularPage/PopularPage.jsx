@@ -1,10 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import './PopularPage.scss'
+import {Link} from "react-router-dom";
 
 const PopularPage = () => {
-    const [posts, setPosts] = useState(null)
+    const [post, setPosts] = useState([])
     const [errorMessage, setErrorMessage] = React.useState("")
+    const [postId, setPostId] = useState(null)
+    const imageClick = (id) => {
+        console.log(id);
+        setPostId(id)
+
+    }
 
 
     useEffect(() => {
@@ -30,30 +37,44 @@ const PopularPage = () => {
         }
     }, [])
 
-    const getColumn = (ind) => {
-        var res = []
-        if (posts) {
-            for (let i = ind; i < posts.length; i += 3) {
-                res.push(React.createElement("img", {src: 'data:img/png;base64,' + posts[i].image, className: "picture"}, null))
-            }
-        }
-        console.log(res)
-        return res
+    if (errorMessage !== "") {
+
+    }
+
+    if (post === []) {
+        return (
+            <div className="wrapper1">
+                <h1>Нет постов</h1>
+            </div>
+        )
     }
 
 
     return (
-        <div class='row popular' id="popular-div">
-            <div className="column">
-                {getColumn(0)}
-            </div>
-            <div className="column">
-                {getColumn(1)}
-            </div>
-            <div className="column">
-                {getColumn(2)}
-            </div>
+        <div className="wrapper1">
+            {post && <div className='gal1'>
+                <div className="gallery1">
+                    <ul className="center">
+                        {post.map((option) => (
+                            <Link to={`/post/${option._id}`}>
+                                <li>
+                                    <img style={{width: 400, height: 300}}
+                                         href={'/post/' + option._id}
+                                         src={`data:img/png;base64, ${option.image}`}
+                                         onClick={() => imageClick(option)}/>
+                                </li>
+                            </Link>
+                        ))}
+
+                    </ul>
+                </div>
+                <div>
+                    <h2 className='h2'>Фотографии закончились</h2>
+                </div>
+            </div>}
         </div>
+
+
     )
 }
 
