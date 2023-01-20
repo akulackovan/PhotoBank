@@ -16,7 +16,7 @@ export const getPopular = async (req, res) => {
                 message: 'Ошибка в получении города пользователя',
             });
         }
-        const [posts] = await Post.findByCity({city});
+        const [posts] = await Post.find({city: city});
         if (!posts) {
             return res.status(404).json({
                 message: 'Ошибка в получении постов данного города',

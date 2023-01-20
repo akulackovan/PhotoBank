@@ -15,6 +15,7 @@ export const createPost = async (req, res) => {
             text: text,
             view: 0,
             likes: 0,
+            timestamps: new Date()
         });
         await newPost.save();
         res.status(201).json({
