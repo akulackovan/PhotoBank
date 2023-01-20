@@ -1,18 +1,19 @@
 import { set } from 'mongoose'
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import ReactCrop from 'react-image-crop'
 
 import 'react-image-crop/dist/ReactCrop.css'
 import 'react-image-crop/src/ReactCrop.scss'
 
 
-const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
+const Cropper = ({ x = 480, y = 480, onChange, size = 7, onSelect}) => {
 
     const [info, setInfo] = useState({
         x: null,
         y: null,
         type: null
     })
+    
     const [src, setSrc] = useState(null);
     const [crop, setCrop] = useState({
         unit: 'px',
@@ -25,33 +26,25 @@ const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
     const [output, setOutput] = useState(null);
     const [error, setErrorMessage] = useState(null)
 
-
     const selectImage = (e) => {
         const temp = URL.createObjectURL(e.target.files[0])
         var img = new Image();
-        img.src = window.URL.createObjectURL( e.target.files[0] );
         img.onload = function() {
-            var width = img.naturalWidth,
-                height = img.naturalHeight;
-
-            window.URL.revokeObjectURL( img.src );
-
-            if( width < 480 && height < 480 ) {
-                setErrorMessage("Загружаемое фото пользователя должно быть не больше 7 Мб и иметь разрешение от 480х480")
-                return
-            }
-            setInfo({x: width, y: height})
+            setInfo({...info, x: img.width, y: img.height})
         }
+
+        img.src = window.URL.createObjectURL( e.target.files[0] );
+        
+        console.log(info)
         if (e.target.files[0].size > 7340032) {
             setErrorMessage("Загружаемое фото пользователя должно быть не больше 7 Мб и иметь разрешение от 480х480")
             return
         }
-        console.log(e.target.files[0].type)
-        setInfo({...info, type: e.target.files[0].type })
+        setInfo({...info, type: 'image/png' })
         console.log(info)
         setSrc(temp)
         setErrorMessage(null)
-        setOutput(null)
+        onSelect(true)
 
     };
 
@@ -82,17 +75,19 @@ const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
             base64: arrayOfStrings[1],
             type: info.type
         })
+        onSelect(false)
     };
 
     const onLoadImg = ({ target: img }) => {
-        setInfo({ x: img.width, y: img.height })
+        setInfo({...info, y: img.height, x: img.width })
+        console.log(info)
     };
 
     const ChangeCrop = () => {
-        setOutput(null)
+        onChange(null)
         setSrc(image)
-
     }
+
 
     return (
         <div className="App">
@@ -115,7 +110,7 @@ const Cropper = ({ x = 480, y = 480, onChange, size = 7 }) => {
                             <ReactCrop src={src} onImageLoaded={setImage}
                                 crop={crop} onChange={setCrop} locked='true'
                                 zoomable={false}>
-                                <img src={src} id="source" width={info.x} height={info.y} onChange={onLoadImg} />
+                                <img src={src} style={{ width: info.x, height: info.y }} id="source" width={info.x} height={info.y} onChange={onLoadImg} />
                             </ReactCrop>
                             <br />
                             <button className="button " onClick={cropImageNow}>Обрезать</button>
