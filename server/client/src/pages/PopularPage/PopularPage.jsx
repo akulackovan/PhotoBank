@@ -27,7 +27,6 @@ const PopularPage = () => {
                 .then(response => {
                         console.log(response.data.posts)
                         setPosts(response.data.posts)
-                        // createPhoto(response.data.posts)
                     }
                 )
 
@@ -60,7 +59,7 @@ const PopularPage = () => {
                                 <li>
                                     <img style={{width: 400, height: 300}}
                                          href={'/post/' + option._id}
-                                         src={`data:img/png;base64, ${option.image}`}
+                                         src={option.image}
                                          onClick={() => imageClick(option)}/>
                                 </li>
                             </Link>
