@@ -38,14 +38,13 @@ const SettingsPage = () => {
     const changeOut = (event) => {
         setLog(true)
     }
-    
+
 
 
 
     const now = localStorage.getItem('app-theme')
-    const [ newTheme, setNewTheme ] = useState(now)
+    const [newTheme, setNewTheme] = useState(now)
     const { theme, setTheme } = useTheme()
-    const [load, setLoad] = useState(false)
 
     const changeTheme = (event) => {
         setNewTheme(event.target.value)
@@ -56,31 +55,31 @@ const SettingsPage = () => {
 
         if (form.username != '' && !form.username.match(/^[A-Za-z0-9]+$/)) {
             setErrorMessage("Имя пользователя должно содержать только цифры и латинские буквы");
-            
+
             setTimeout(() => setErrorMessage(""), 2000)
             return;
         }
         if (!(form.username.length <= 128)) {
             setErrorMessage("Имя пользователя должно быть меньше 128 символов");
-            
+
             setTimeout(() => setErrorMessage(""), 2000)
             return;
         }
         if (form.newpass != '' && !form.newpass.match(/^[A-Za-z0-9]+$/)) {
             setErrorMessage("Пароль должен содержать только цифры и латинские буквы");
-            
+
             setTimeout(() => setErrorMessage(""), 2000)
             return;
         }
         if (!(form.newpass.length <= 128)) {
             setErrorMessage("Пароль должен быть меньше 128 символов");
-            
+
             setTimeout(() => setErrorMessage(""), 2000)
             return;
         }
         if (!(form.checkpass == form.newpass)) {
             setErrorMessage("Пароли не совпадают");
-            
+
             setTimeout(() => setErrorMessage(""), 2000)
             return;
         }
@@ -89,8 +88,7 @@ const SettingsPage = () => {
             setTimeout(() => setErrorMessage(""), 2000)
             return;
         }
-        if(form.onSelect)
-        {
+        if (form.onSelect) {
             setErrorMessage("Фото не обрезано");
             setTimeout(() => setErrorMessage(""), 2000)
             return;
@@ -98,9 +96,9 @@ const SettingsPage = () => {
         try {
             await axios.post('/settings', { ...form }, {
                 headers:
-                {
-                    'Context-Type': 'application/json'
-                }
+                    {
+                        'Context-Type': 'application/json'
+                    }
             })
                 .then(response => {
                     console.log(newTheme)
@@ -109,6 +107,19 @@ const SettingsPage = () => {
                     setTimeout(() => setErrorMessage(""), 2000)
                     setFormKey(formKey + 1)
                     document.getElementById("inputs").reset();
+                    setForm({
+                        userId: userId,
+                        username: '',
+                        password: '',
+                        newpass: '',
+                        checkpass: '',
+                        text: '',
+                        city: '',
+                        base64: '',
+                        type: ''
+                    })
+
+
                 })
         }
         catch (error) {
@@ -127,77 +138,75 @@ const SettingsPage = () => {
         )
     }
 
-
-
-
     return (
         <div className='settings'>
-            
-           
             <div className='container-s'>
-            <form id="inputs">
-                <div className='rowC'>
-                    <div className='fiels'>
-                        <input
-                            className="input"
-                            type="text"
-                            placeholder="Логин"
-                            name="username"
-                            onChange={changeForm}
-                        />
-                        <input
-                            className="input"
-                            type="text"
-                            placeholder="Cтарый пароль"
-                            name="password"
-                            onChange={changeForm}
-                        />
-                        <input
-                            className="input"
-                            type="text"
-                            placeholder="Новый пароль"
-                            name="newpass"
-                            onChange={changeForm}
-                        />
-                        <input
-                            className="input"
-                            type="text"
-                            placeholder="Подтверждение нового пароля"
-                            name="checkpass"
-                            onChange={changeForm}
-                        />
+                <form id="inputs">
+                    <div className='rowC'>
+                        <div className='fiels'>
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder="Логин"
+                                name="username"
+                                onChange={changeForm}
+                            />
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder="Cтарый пароль"
+                                name="password"
+                                onChange={changeForm}
+                            />
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder="Новый пароль"
+                                name="newpass"
+                                onChange={changeForm}
+                            />
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder="Подтверждение нового пароля"
+                                name="checkpass"
+                                onChange={changeForm}
+                            />
+                        </div>
+                        <div className='sec' style={{ textAlign: 'left' }}>
+                            <input
+                                className="input"
+                                type="text"
+                                placeholder="Описание пользователя"
+                                name="text"
+                                onChange={changeForm}
+                            />
+                            <CityCombobox name='city' onChange={(value) => setForm({ ...form, city: value })} key={formKey} />
+                        </div>
                     </div>
-                    <div className='sec' style={{ textAlign: 'left' }}>
-                        <input
-                            className="input"
-                            type="text"
-                            placeholder="Описание пользователя"
-                            name="text"
-                            onChange={changeForm}
-                        />
-                        <CityCombobox name='city' onChange={(value) => setForm({...form, city: value})} key={formKey}/>
-                    </div>
-                </div>
-                
-                    
+
+
                 </form>
-                
+
 
                 <div className='theme'>
                     <RadioGroup name="number-complex" defaultValue={now}>
                         <Gapped horizontal gap={0}>
                             <b>Тема: </b>
-                            <Radio className ="radio" value="light" onChange={changeTheme}/> <b>Светлая</b>
-                            <Radio className ="radio" value="dark" onChange={changeTheme} /> <b>Темная</b>
+                            <Radio className="radio" value="light" onChange={changeTheme} /> <b>Светлая</b>
+                            <Radio className="radio" value="dark" onChange={changeTheme} /> <b>Темная</b>
                         </Gapped>
                     </RadioGroup>
                 </div>
-                <Cropper onChange={(value) => setForm({...form, base64: value.base64, type: value.type})} 
-                onSelect={(value) => setForm({...form, onSelect: value})} key={formKey}/>
-                <button className='button'
-                    onClick={settingsHandler}>СОХРАНИТЬ</button>
-                <button className='button'
-                    onClick={changeOut}>ВЫЙТИ ИЗ АККАУНТА</button>
+                <div>
+                    <Cropper setData={(value) => setForm({ ...form, base64: value })} key={formKey} />
+                </div>
+                <div className='buttons'>
+                    <button className='button'
+                            onClick={settingsHandler}>СОХРАНИТЬ</button>
+                    <button className='button'
+                            onClick={changeOut}>ВЫЙТИ ИЗ АККАУНТА</button>
+                </div>
                 {errorMessage && <div className="error"> {errorMessage} </div>}
             </div>
         </div>

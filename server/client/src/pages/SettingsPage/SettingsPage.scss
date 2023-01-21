@@ -1,24 +1,44 @@
-.settings{
-    .rowC{
-        margin-top: 3%;
-        display:flex; flex-direction:row;}
-        .first{
-            width: 40%;
-            margin-left: 5%;
-        }
-        .second{
-            width: 40%;
-            margin-left: 10%;
-        }
-        .second input {
-            padding: 0 0 23% 0;
-        }
-    
-        .button{
-            margin-top: 3%;
-        }
-    .radio{
-        color: var(----font-color);
-        margin-left: -30%;
-    }
+.settings {
+  .rowC {
+    margin-top: 3%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .fiels {
+    width: 40%;
+    margin-left: 5%;
+  }
+
+  .sec {
+    width: 40%;
+    margin-left: 10%;
+  }
+
+  .sec input {
+    padding: 0 0 23% 0;
+  }
+
+  .button {
+    margin-top: 3%;
+  }
+
+  .radio {
+    color: var(----font-color);
+    margin-left: -30%;
+  }
+}
+
+.container-s {
+  text-align: center;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border: none;
+  border-radius: 30px;
+}
+
+
+.cropper {
+  padding: 2%;
 }
