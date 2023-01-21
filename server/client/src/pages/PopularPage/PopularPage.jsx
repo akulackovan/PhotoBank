@@ -7,6 +7,7 @@ const PopularPage = () => {
     const [post, setPosts] = useState([])
     const [errorMessage, setErrorMessage] = React.useState("")
     const [postId, setPostId] = useState(null)
+    const [isToday, setToday] = useState(true)
     const imageClick = (id) => {
         console.log(id);
         setPostId(id)
@@ -27,6 +28,8 @@ const PopularPage = () => {
                 .then(response => {
                         console.log(response.data.posts)
                         setPosts(response.data.posts)
+                        setToday(response.data.isToday)
+                        // createPhoto(response.data.posts)
                     }
                 )
 
@@ -51,7 +54,9 @@ const PopularPage = () => {
 
     return (
         <div className="wrapper1">
+
             {post && <div className='gal1'>
+                {!isToday && <h3>Фотографий за день нет</h3>}
                 <div className="gallery1">
                     <ul className="center">
                         {post.map((option) => (
