@@ -2,20 +2,24 @@ import Post from "../models/Post.js";
 
 export const createPost = async (req, res) => {
     try {
-        const {city, image, text} = req.body;
-        if (!city || !image || !text) {
+        const {city, photo, description, userId} = req.body;
+        if (!city || !photo || !description) {
             return res.status(400).json({
                 message: 'Ошибка при создании поста',
             });
         }
+        console.log("HERE" + city +" "+ photo.length +" " + description)
         const newPost = new Post({
-            author: req.authenticatorData.userId,
+            author: userId,
             city: city,
-            image: image,
-            text: text,
+            image: photo,
+            typeImage: null,
+            text: description,
             view: 0,
             likes: 0,
+            timestamps: new Date()
         });
+        console.log("HERE1 " + newPost)
         await newPost.save();
         res.status(201).json({
             newPost,

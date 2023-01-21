@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import './RegPage.scss'
-import {Link, Redirect} from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import CityCombobox from '../../components/CityCombobox/CityCombobox'
 
 const RegPage = () => {
@@ -18,10 +18,11 @@ const RegPage = () => {
 
 
     const changeForm = (event) => {
-        setForm({...form, [event.target.name]: event.target.value})
+        setForm({ ...form, [event.target.name]: event.target.value })
         console.log(form)
     }
-    
+
+   
     const registerHandler = async () => {
         if (!form.username.match(/^[A-Za-z0-9]+$/)) {
             setErrorMessage("Имя пользователя должно содержать только цифры и латинские буквы");
@@ -40,26 +41,28 @@ const RegPage = () => {
             return;
         }
         try {
-            await axios.post('/auth/reg', {...form}, {
+            await axios.post('/auth/reg', { ...form }, {
                 headers:
-                    {
-                        'Context-Type': 'application/json'
-                    }
+                {
+                    'Context-Type': 'application/json'
+                }
             })
                 .then(response => {
                     console.log(response)
                     setErrorMessage(response.data.message + "    Вы будете перенаправлены на страницу авторизации через 5 секунд")
                     setTimeout(() => setRedirect(true), 5000)
                 })
-        } catch (error) {
+        }
+        catch (error) {
             console.log(error)
             setErrorMessage(error.response.data.message)
         }
     }
-    
+
+
     if (redirect) {
         return (
-            <Redirect to='/auth'/>
+            <Redirect to='/auth' />
         )
     }
 
@@ -82,13 +85,12 @@ const RegPage = () => {
                     onChange={changeForm}
                 />
                 <div style={{width: '80%', margin: 'auto', textAlign: 'left'}}>
-                    <CityCombobox className="city" name="city"/>
+                <CityCombobox className="city" name="city" onChange={(value) => setForm({...form, city: value})} />
                 </div>
                 <button
                     className='button'
                     onClick={registerHandler}
-                >ЗАРЕГИСТРИРОВАТЬСЯ
-                </button>
+                >ЗАРЕГИСТРИРОВАТЬСЯ</button>
                 {errorMessage && <div className="error"> {errorMessage} </div>}
                 <a className='link'><Link to="/auth">ОБРАТНО</Link></a>
 
