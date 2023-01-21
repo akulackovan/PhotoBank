@@ -1,8 +1,18 @@
-import React, {useState} from 'react'
-import {Redirect} from "react-router-dom"
+import React, {useState, useContext} from 'react'
+import {Redirect, Link} from "react-router-dom"
 import axios from 'axios'
 import './AddPostPage.scss'
 import CityCombobox from '../../components/CityCombobox/CityCombobox'
+import Cropper from "../../components/Cropper/cropper";
+import {AuthContext} from "../../context/AuthContext";
+
+// function encodeImageFileAsURL(element) {
+//     var file = element.files[0];
+//     var reader = new FileReader();
+//     reader.readAsDataURL(file);
+//     return reader.result
+// }
+
 
 function encodeImageFileAsURL(element) {
     var filesSelected = document.getElementById("input__file").files;
@@ -25,32 +35,30 @@ function encodeImageFileAsURL(element) {
 const AddPostPage = () => {
     const [errorMessage, setErrorMessage] = React.useState("")
     const [redirect, setRedirect] = React.useState(false)
+    const [formKey, setFormKey] = useState(0)
+    const { userId } = useContext(AuthContext)
     const [form, setForm] = useState(
         {
             photo: '',
-            city: '1',
-            description: ''
+            city: '',
+            description: '',
+            userId: userId
         }
     )
 
     const changeForm = (event) => {
-        console.log("HEY" + event.target.value)
-        if (event.target.name === "photo") {
-            encodeImageFileAsURL(form)
-        } else {
-            setForm({...form, [event.target.name]: event.target.value})
-        }
+        console.log(event.target)
+        setForm({...form, [event.target.name]: event.target.value})
         console.log(form)
     }
 
     const addPostHandler = async () => {
-        console.log(form.photo.length)
-        console.log(form.photo)
+        console.log(form.city)
         if (form.photo == '') {
             setErrorMessage("Необходимо добавить фото");
             return;
         }
-        if (form.city == "") {
+        if (form.city == '') {
             setErrorMessage("Необходимо выбрать город");
             return;
         }
@@ -59,8 +67,7 @@ const AddPostPage = () => {
             return;
         }
         try {
-            console.log("buff3" + form.photo)
-            await axios.post('/post', {...form}, {
+            await axios.post('/post/post', {...form}, {
                 headers:
                     {
                         'Context-Type': 'application/json'
@@ -87,16 +94,10 @@ const AddPostPage = () => {
         <div>
             <div className='addPost'>
                 <div className='center back'>
-                    <div className='center photo'>
-                        <div className="input__wrapper">
-                            <input name="photo" type="file" id="input__file" className="input input__file" onChange={changeForm}/>
-                            <label htmlFor="input__file" className="input__file-button">
-                                <div className="input__file-icon-wrapper"><img className="input__file-icon" src="https://cdn-icons-png.flaticon.com/512/70/70310.png"  alt="Добавить изображение" width="300px" height="300px"/></div>
-                            </label>
-                        </div>
-                    </div>
+                    <Cropper y={360} x={480} setData={(value) => setForm({...form, photo: value})}></Cropper>
+                    <br/>
                     <div style={{width: '80%', margin: 'auto', textAlign: 'left'}}>
-                        <CityCombobox className="city" name="city"/>
+                        <CityCombobox name='city' onChange={(value) => setForm({ ...form, city: value })} key={formKey} />
                     </div>
                     <div className='description'>
                         <input
@@ -115,5 +116,5 @@ const AddPostPage = () => {
         </div>
     )
 }
-
 export default AddPostPage
+
