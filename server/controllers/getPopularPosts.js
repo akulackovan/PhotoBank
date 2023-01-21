@@ -3,6 +3,7 @@ import Post from "../models/Post.js";
 
 export const getPopular = async (req, res) => {
     try {
+        var isToday = false
         const {userId} = req.body;
         const user = await User.findOne({userId});
         if (!user) {
@@ -19,14 +20,28 @@ export const getPopular = async (req, res) => {
         const posts = await Post.find({city: city});
         if (!posts) {
             return res.status(404).json({
-                message: 'Ошибка в получении постов данного города.',
+                message: 'Фотографий в городе нет',
             });
         }
+        var nowTime = new Date()
+        nowTime.setHours(0, 0, 0, 0)
+        console.log(isToday)
+        console.log(nowTime)
+        for (let i = posts.length - 1; i >= 0; i--) {
+            var createDate = posts[i].timestamps
+            console.log(createDate)
+            if (createDate > nowTime) {
+                isToday = true
+                break
+            }
+        }
+        console.log(posts.length)
         if (posts.length > 1) {
             posts.sort(sortByDateAndViews);
         }
-        return res.json({
+        return res.status(200).json({
             posts,
+            isToday,
             message: 'Пост получен',
         })
     } catch (error) {
@@ -36,8 +51,7 @@ export const getPopular = async (req, res) => {
 };
 
 function sortByDateAndViews(first, second) {
-    console.log(first)
-    return first.timestamps === second.timestamps ?
-        first.views - second.views : first.timestamps - second.timestamps;
+    return -1 * (first.timestamps === second.timestamps ?
+        first.views - second.views : first.timestamps - second.timestamps);
     // todo или return second.view - first.view;
 }
