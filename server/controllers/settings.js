@@ -20,7 +20,7 @@ export const settings = async (req, res) => {
             const isUsed = await User.findOne({username})
             if (isUsed) {
                 return res.status(400).json({
-                    message: 'Логин занят. Выберите другой',
+                message: 'Логин занят. Выберите другой',
                 })
             }
         }
@@ -52,28 +52,28 @@ export const settings = async (req, res) => {
         const isCity= await City.findOne({id: city})
         if (city != '' && !isCity) {
             return res.status(400).json({
-                message: 'Такого города нет',
-            })
-        }
-
+                    message: 'Такого города нет',
+                })
+            }
+        
         if (username != '')
         {
             await User.updateOne({_id: userId}, {username: username})
         }
         if (newpass != '' && password != '')
-        {
+        { 
             const salt = bcrypt.genSaltSync(10)
             const hash = bcrypt.hashSync(newpass, salt)
             await User.updateOne({_id: userId}, {password: hash})
         }
         if (text != '')
-        {
+        { 
             await User.updateOne({_id: userId}, {text: text})
         }
         if (city != '')
         {
             const idCity = isCity._id
-            await User.updateOne({_id: userId}, {city: idCity})
+            await User.updateOne({_id: userId}, {city: idCity})  
         }
         if (base64 != ''){
             await User.updateOne({_id: userId},{image: base64, typeImg: type})
