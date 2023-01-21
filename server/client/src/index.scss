@@ -4,3 +4,32 @@
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
 }
+
+html[data-theme='dark'] {
+  --button-text-color: #eceeeb;
+  --button-background-color: #4e005c;
+
+  --nav-bar-background-color: #4e005c;
+
+  --font-color: #eceeeb;
+
+  --input-front:#323235;
+  --input-background: #423944;
+
+  --background-color: #292929;
+  --icon-color: #ba8fc2;
+}
+
+html[data-theme='light'] {
+  --button-text-color: #eceeeb;
+  --button-background-color: #6d9ea3ff;
+
+  --nav-bar-background-color: #6d9ea3ff;
+  --font-color: #323235;
+  
+  --input-front:#323235;
+  --input-background: #eceeeb;
+
+  --background-color: #ffffff;
+  --icon-color: #4e005c;
+}
