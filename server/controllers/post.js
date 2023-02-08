@@ -8,12 +8,15 @@ import jwt from 'jsonwebtoken'
 export const getPostById = async (req, res) => {
     try {
         const { id } = req.query
-        const isPost = await Post.findOne({ _id: id[1] })
+        const isPost = await Post.findOne({ _id: id })
         if (!isPost) {
             return res.status(400).json({
                 message: 'Поста не существует'
             })
         }
+
+        const likes = await User.find({likes: id})
+        isPost.likes = likes.length
 
         const autor = await User.findOne({ _id: isPost.author })
         isPost.author = autor
@@ -27,6 +30,7 @@ export const getPostById = async (req, res) => {
             message: 'Пост получен',
         })
     } catch (error) {
+        console.log(error)
         return res.status(400).json({
             message: 'Ошибка при получении поста'
         })
@@ -43,9 +47,9 @@ export const getMyPost = async (req, res) => {
         }
 
         const isPost = await Post.find({ author: req.query.id })
-        if (!isPost) {
+        if (!isPost || isPost.length == 0) {
             return res.status(400).json({
-                message: 'Поста не существует'
+                message: 'Фото нет'
             })
         }
 
@@ -157,17 +161,3 @@ export const setLike = async (req, res) => {
     }
 }
 
-export const updateLike = async (req, res) => {
-    try {
-        const {idPost} = req.query
-        let post = await Post.findOne({_id: idPost})
-           
-        res.status(200).json({
-            likes: post.likes,
-            message: 'Лайк изменен',
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({ message: 'Ошибка при получении статуса лайка' })
-    }
-}

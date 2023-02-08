@@ -1,28 +1,67 @@
-import React from 'react'
-import './NavBar.scss'
+import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
+import "./NavBar.scss";
 
 const NavBar = () => {
-    return (
-        <nav>
-            <div className="nav-wrapper navbar">
-                <a href='/popular' className="left photobank">ФОТОБАНК</a>
-                <ul className="list">
-                    <li><a href='/popular' className="listHeader">Популярное</a></li>
-                    <li><a href='/subsc' className="listHeader">Подписки</a></li>
-                    <li><a href='/profile' className="listHeader">Профиль</a></li>
-                    <li><a href='/settings' className="listHeader">Настройки</a></li>
-                </ul>
-                <form className="search" action="/search" method="get">
-                    <input
-                        className="input"
-                        type="text"
-                        placeholder="ПОИСК"
-                        name="user"
-                    />
-                </form>
-            </div>
-        </nav>
-    )
-}
+  const [form, setForm] = useState("");
+  const [str, setStr] = useState("");
 
-export default NavBar
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      setStr("/search/" + form);
+    }
+  };
+
+  const changeForm = (event) => {
+    setForm(event.target.value);
+  };
+
+  if (str) {
+    return <Redirect to={str} />;
+  }
+
+  return (
+    <nav className="nav">
+      <div className="parent">
+        <div className="child">
+          <a className="site-title">ФОТОБАНК</a>
+          <ul>
+            <li>
+              <a href="/popular" title="Популярное">
+                Популярное
+              </a>
+            </li>
+            <li>
+              <a href="/subsc" title="Подписки">
+                Подписки
+              </a>
+            </li>
+            <li>
+              <a href="/profile" title="Профиль">
+                Профиль
+              </a>
+            </li>
+            <li>
+              <a href="/settings" title="Настройки">
+                Настройки
+              </a>
+            </li>
+            <li>
+              <input
+                className="input"
+                type="text"
+                placeholder="ПОИСК"
+                name="user"
+                title="Поиск"
+                onKeyPress={handleKeyPress}
+                onChange={changeForm}
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default NavBar;

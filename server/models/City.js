@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
 
-const CitySchema = new mongoose.Schema(
+const City = new mongoose.Schema(
     {
-        city: {type: String, required: true},
+    city: { type: String, required: true },
     },
 )
 
-export default mongoose.model('City', CitySchema)
+export default mongoose.model('City', City)
