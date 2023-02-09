@@ -11,14 +11,12 @@ const UserSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        city: {type: mongoose.Schema.Types.ObjectId, ref: 'City'},
-        image: {type: Buffer},
-        posts: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Post',
-            },
-        ],
+        text: {
+            type: String,
+        },
+        city: { type: mongoose.Schema.Types.ObjectId, ref: 'City'  },
+        image: { type: String },
+        typeImg: {type: String},
         likes: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -28,11 +26,11 @@ const UserSchema = new mongoose.Schema(
         subscriptions: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
+                ref: 'UserSchema',
             },
         ],
     },
-    {timestamps: true},
+    { timestamps: true },
 )
 
 export default mongoose.model('User', UserSchema)

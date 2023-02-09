@@ -1,35 +1,52 @@
-.navbar {
-  background-color: #6d9ea3ff;
-  color: #f3f2ef;
-  padding-left: 2%;
+.nav {
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  background-color: var(--button-background-color);
+}
+.parent {
+  overflow: auto;
+  //Полоса прокрутки
+  margin-left: auto;
+  margin-right: auto;
+}
+.parent::-webkit-scrollbar {
+  background-color: aliceblue;
+  width: 5px; /* ширина всей полосы прокрутки */
+  height: 5px;
+}
 
-  .photobank {
-    font-size: 35px;
-    font-weight: 1000;
-  }
+.parent::-webkit-scrollbar-track {
+  background: var(--back-2); /* цвет зоны отслеживания */
+}
 
-  .list {
-    padding-left: 17%;
+.parent::-webkit-scrollbar-thumb {
+  background-color: var(--button-background-color); /* цвет бегунка */
+  border-radius: 30px; /* округлось бегунка */
+}
 
-    .listHeader {
-      font-size: 150%;
-      font-weight: 900;
-    }
-  }
+.child {
+  display: flex;
+  margin: auto;
+  min-width: 850px;
+}
 
-  .search {
-    padding-left: 65%;
-    font-size: 20px;
-    height: 70%;
+.nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+}
 
-    .input {
-      width: 30%;
-      padding-left: 2%;
-      background-color: rgba(252, 252, 252, 0.2);
-      font-weight: 900;
-      color: #48523d;
-      border: none;
-      border-radius: 10px;
-    }
+.site-title {
+  color: inherit;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.nav li a {
+  font-size: 20px;
+  .input {
+    width: 150px;
   }
 }
