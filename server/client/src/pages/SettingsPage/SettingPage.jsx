@@ -1,13 +1,14 @@
 import React, { useContext, useState } from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
-import { AuthContext } from "../../context/AuthContext";
+import  AuthContext  from "../../context/AuthContext";
 import "./SettingsPage.scss";
 import CityCombobox from "../../components/CityCombobox/CityCombobox";
-import { Gapped, Radio, RadioGroup } from "@skbkontur/react-ui";
 import { useTheme } from "../../hooks/use.theme";
 import Cropper from "../../components/Cropper/cropper";
 import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import { Gapped, Radio, RadioGroup } from "@skbkontur/react-ui";
+
 
 const SettingsPage = () => {
   const { logout } = useContext(AuthContext);
@@ -202,7 +203,7 @@ const SettingsPage = () => {
         </form>
 
         <div className="theme">
-          <RadioGroup name="number-complex" defaultValue={now}>
+        <RadioGroup name="number-complex" defaultValue={now}>
             <Gapped horizontal gap={0}>
               <b>Тема: </b>
               <Radio
@@ -220,6 +221,7 @@ const SettingsPage = () => {
             </Gapped>
           </RadioGroup>
         </div>
+
         <div>
           <Cropper
             setData={(value) => setForm({ ...form, base64: value })}
