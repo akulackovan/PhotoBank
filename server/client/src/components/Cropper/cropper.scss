@@ -1,0 +1,30 @@
+.App {
+  margin-top: 5%;
+}
+
+.input__file {
+  visibility: hidden;
+}
+
+.input__file-button {
+  border: 5px solid black;
+  display: flex;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.output {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

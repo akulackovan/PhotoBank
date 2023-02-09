@@ -1,0 +1,52 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  background-color: var(--button-background-color);
+}
+.parent {
+  overflow: auto;
+  //Полоса прокрутки
+  margin-left: auto;
+  margin-right: auto;
+}
+.parent::-webkit-scrollbar {
+  background-color: aliceblue;
+  width: 5px; /* ширина всей полосы прокрутки */
+  height: 5px;
+}
+
+.parent::-webkit-scrollbar-track {
+  background: var(--back-2); /* цвет зоны отслеживания */
+}
+
+.parent::-webkit-scrollbar-thumb {
+  background-color: var(--button-background-color); /* цвет бегунка */
+  border-radius: 30px; /* округлось бегунка */
+}
+
+.child {
+  display: flex;
+  margin: auto;
+  min-width: 850px;
+}
+
+.nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+}
+
+.site-title {
+  color: inherit;
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.nav li a {
+  font-size: 20px;
+  .input {
+    width: 150px;
+  }
+}
