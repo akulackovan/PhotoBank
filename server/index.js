@@ -12,15 +12,6 @@ import multer from 'multer'
 const PORT = process.env.PORT || 5000
 const app = express()
 
-const storage = multer.diskStorage({
-    destination: (_, __, cb) => {
-        cb(null, 'uploads')
-    },
-    filename:(_, file, cb) => {
-        cb(null, file.originalname)
-    },
-})
-
 
 app.use(cors());
 app.use(express.json({limit: '50mb' }));
