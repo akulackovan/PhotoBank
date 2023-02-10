@@ -49,13 +49,13 @@ import Post from "../models/Post.js";
     return res.status(200).json({
       posts,
       isToday,
-      message: "Пост получен",
+      message: "Популярное",
     });
   } catch (error) {
     console.log(error);
     res
       .status(400)
-      .json({ message: "Ошибка при получении популярных постов." });
+      .json({ message: "Ошибка при получении популярных" });
   }
 };*/
 
@@ -124,24 +124,24 @@ export const getPopular = async (req, res) => {
             }
         }
         if (postByDate.length == 0) {
-            popular.push({date: `${date.getDate()}\\${date.getMonth()+1}\\${date.getFullYear()}`, posts: "Фотографий за день нет"})
+            popular.push({date: `${(date.getDate()) < 10 ? 0 : ''}${date.getDate()}.${date.getMonth()+ 1 < 10 ? 0 : ''}${date.getMonth()+1}.${date.getFullYear()}`, posts: "Фотографий за день нет"})
         }
         else {
             postByDate.sort(compare)
-            popular.push({date: `${date.getDate()}\\${date.getMonth()+ 1}\\${date.getFullYear()}`, posts: postByDate})
+            popular.push({date: `${(date.getDate()) < 10 ? 0 : ''}${date.getDate()}.${date.getMonth()+ 1 < 10 ? 0 : ''}${date.getMonth()+ 1}.${date.getFullYear()}`, posts: postByDate})
         }
         date.setDate(date.getDate() - 1)
     }
 
     return res.status(200).json({
         popular,
-        message: "Пост получен",
+        message: "Популярное",
       });
   } catch (error) {
     console.log(error);
     res
       .status(400)
-      .json({ message: "Ошибка при получении популярных постов." });
+      .json({ message: "Ошибка при получении популярных" });
   }
 };
 
