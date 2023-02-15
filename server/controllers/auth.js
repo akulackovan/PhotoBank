@@ -2,7 +2,6 @@ import User from '../models/User.js'
 import City from '../models/City.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import path from 'path'
 
 /** Регистрация пользователя */
 export const register = async (req, res) => {
@@ -123,15 +122,11 @@ export const getAnother = async (req, res) => {
         }
 
         /** Поиск подписки */
-        let hasSubscribe = await User.find({
-            $and: [
-               { _id: myId },
-               {subscriptions: userId }
-            ]
-         } )
+        let hasSubscribe = await User.findOne({ _id: myId, subscriptions: userId})
          let isSubscribe = true
          if (hasSubscribe)
          {
+            console.log("Suby" + hasSubscribe)
             isSubscribe = false
          }
 
