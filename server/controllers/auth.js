@@ -2,7 +2,6 @@ import User from '../models/User.js'
 import City from '../models/City.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import path from 'path'
 
 /** Регистрация пользователя */
 export const register = async (req, res) => {
@@ -65,7 +64,7 @@ export const register = async (req, res) => {
         })
     } catch (error) {
         console.log(error)
-        res.status(400).json({message: 'Ошибка при создании пользователя.'})
+        res.status(400).json({message: 'Ошибка при авторизации'})
     }
 }
 
@@ -77,7 +76,7 @@ export const login = async (req, res) => {
         const user = await User.findOne({username})
         if (!user) {
             return res.status(404).json({
-                message: 'Такого пользователя не существует.',
+                message: 'Такого пользователя не существует',
             })
         }
         
@@ -85,7 +84,7 @@ export const login = async (req, res) => {
         const isPasswordCorrect = await bcrypt.compare(password, user.password)
         if (!isPasswordCorrect) {
             return res.status(401).json({
-                message: 'Неверный пароль.',
+                message: 'Неверный пароль',
             })
         }
 
@@ -123,15 +122,11 @@ export const getAnother = async (req, res) => {
         }
 
         /** Поиск подписки */
-        let hasSubscribe = await User.find({
-            $and: [
-               { _id: myId },
-               {subscriptions: userId }
-            ]
-         } )
+        let hasSubscribe = await User.findOne({ _id: myId, subscriptions: userId})
          let isSubscribe = true
          if (hasSubscribe)
          {
+            console.log("Suby" + hasSubscribe)
             isSubscribe = false
          }
 
@@ -146,12 +141,12 @@ export const getAnother = async (req, res) => {
             subscibe,
             city:city.city,
             isSubscribe,
-            message: 'Профиль успешен =)',
+            message: 'Профиль успешен',
         })
 
     } catch (error) {
         console.log(error)
-        res.status(401).json({message: 'Нет'})
+        res.status(401).json({message: 'Нет доступа'})
     }
 }
 
@@ -173,7 +168,7 @@ export const getMe = async (req, res) => {
         res.json({
             user,
             subscibe,
-            message: 'Профиль успешен =)',
+            message: 'Профиль успешен',
         })
     } catch (error) {
         console.log(error)
