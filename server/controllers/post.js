@@ -68,6 +68,11 @@ export const getMyPost = async (req, res) => {
 export const getPostComments = async (req, res) => {
     try {
         const post = await Post.findById(req.query.id)
+        if (!post) {
+            return res.status(400).json({
+                message: 'Поста не существует'
+            })
+        }
         const list = await Promise.all(
             post.comments.map((comment) => {
             return Comment.findById(comment)
@@ -103,6 +108,12 @@ export const getLike = async (req, res) => {
         const {idUser, idPost} = req.query
         let user = await User.findOne({_id: idUser, likes: idPost})
         
+        const post = await Post.findOne({ _id: idPost })
+        if (!post) {
+            return res.status(400).json({
+                message: 'Поста не существует'
+            })
+        }
         if (!user) {
             var like = false
         }
@@ -123,6 +134,11 @@ export const getLike = async (req, res) => {
 export const addView = async (req, res) => {
     try {
         const post = await Post.findById(req.query.id)
+        if (!post) {
+            return res.status(400).json({
+                message: 'Поста не существует'
+            })
+        }
         await Post.updateOne({_id: req.query.id}, {views: post.views + 1})  
         res.status(200).json({
             message: 'Успешно',
@@ -136,6 +152,12 @@ export const addView = async (req, res) => {
 export const setLike = async (req, res) => {
     try {
         const {idUser, idPost} = req.query
+        const post = await Post.findById(idPost)
+        if (!post) {
+            return res.status(400).json({
+                message: 'Поста не существует'
+            })
+        }
         let user = await User.findOne({_id: idUser, likes: idPost})
         var like = false
         if (!user) {
