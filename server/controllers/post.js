@@ -17,8 +17,9 @@ export const getPostById = async (req, res) => {
         isPost.likes = likes.length
 
         const autor = await User.findOne({ _id: isPost.author })
-        isPost.author = autor
-
+        autor.password = ""
+        isPost.author =  autor
+        console.log(isPost)
         const city = await City.findOne({ _id: isPost.city })
         isPost.city = city
 
@@ -145,7 +146,7 @@ export const addView = async (req, res) => {
         })
     } catch (error) {
         console.log(error)
-        res.status(400).json({ message: 'Ошибка при получении статуса лайка' })
+        res.status(400).json({ message: 'Ошибка при добавлении просмотра' })
     }
 }
 
