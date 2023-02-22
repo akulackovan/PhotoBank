@@ -2,6 +2,7 @@ import User from '../models/User.js'
 import City from '../models/City.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import path from 'path'
 
 /** Регистрация пользователя */
 export const register = async (req, res) => {
@@ -225,6 +226,12 @@ export const search = async (req, res) => {
     try {
         /** Получение параметра */
         const {name} = req.query
+        if (!name) {
+            return res.status(400).json({
+                message: 'Запрос для поиска пустой',
+            })
+        }
+
         /** Поиск */
         const search = await User.find({"username": {$regex: `${name}`, $options: 'ix'}})
         if (!search) {
