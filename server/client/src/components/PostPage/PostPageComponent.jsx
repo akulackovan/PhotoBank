@@ -40,7 +40,11 @@ useEffect(() => {
     .catch( function (error) {
       console.log(error)
       setErrorMessage(error.response.data.message);
-      setTimeout(() => setErrorMessage(""), 2000);
+      if (error.response.data.message != "Поста не существует")
+      {
+        setTimeout(() => setErrorMessage(""), 2000);
+      }
+      
       setLoading(false);
     });
 }, []);
