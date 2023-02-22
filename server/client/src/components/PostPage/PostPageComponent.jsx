@@ -16,11 +16,39 @@ const PostPageComponent = ({ id }) => {
   const [comments, setComments] = useState({
     length: 0,
   });
-  const [view, setView] = useState();
   const { userId } = useContext(AuthContext);
   const [like, setLike] = useState();
   const [countLike, setCountLike] = useState();
   console.log(userId);
+
+//Добавить просмотр + данные о посте
+useEffect(() => {
+  axios({
+    method: "put",
+    url: "/post/addView",
+    headers: {
+      "content-type": "application/json",
+    },
+    params: {
+      id: id,
+    },
+  })
+    .then(function (response){
+      console.log(response)
+      getPost();
+    })
+    .catch( function (error) {
+      console.log(error)
+      setErrorMessage(error.response.data.message);
+      if (error.response.data.message != "Поста не существует")
+      {
+        setTimeout(() => setErrorMessage(""), 2000);
+      }
+      
+      setLoading(false);
+    });
+}, []);
+
 
 
 
@@ -36,7 +64,7 @@ const PostPageComponent = ({ id }) => {
         id: id,
       },
     })
-      .then((response) => {
+      .then( function (response) {
         console.log(response.data);
         if (response.data.total.length == 0) {
           setComments({ length: 0 });
@@ -47,7 +75,7 @@ const PostPageComponent = ({ id }) => {
         
         setLoadingComm(false);
       })
-      .catch((error) => {
+      .catch(function (error) {
         setErrorMessage(error.response.data.message);
         setTimeout(() => setErrorMessage(""), 2000);
       });
@@ -62,12 +90,13 @@ const PostPageComponent = ({ id }) => {
       },
       params: {
         id: id,
+        user: userId
       },
     })
-      .then((response) => {
+      .then(function (response) {
         console.log(response.data.isPost);
         setPost(response.data.isPost);
-        setView(response.data.isPost.views);
+        setLoading(false);
         axios({
           method: "get",
           url: "/post/getLike",
@@ -79,7 +108,7 @@ const PostPageComponent = ({ id }) => {
             idPost: id,
           },
         })
-          .then((responseLike) => {
+          .then(function (responseLike) {
             setLike(responseLike.data.like);
             console.log("Like2"+ like);
             console.log(response.data.isPost.likes)
@@ -91,46 +120,22 @@ const PostPageComponent = ({ id }) => {
               setCountLike(response.data.isPost.likes + 1)
             }
           })
-          .catch((error) => {
+          .catch(function (error) {
             setErrorMessage(error.response.data.message);
             setTimeout(() => setErrorMessage(""), 2000);
+            return
           });
-
         console.log(countLike)
-        setLoading(false);
         getComments();
       })
-      .catch((error) => {
+      .catch(function (error) {
         setErrorMessage(error.response.data.message);
         setTimeout(() => setErrorMessage(""), 2000);
       });
       console.log("Like" + like)
   };
 
-  //Добавить просмотр + данные о посте
-  useEffect(() => {
-    axios({
-      method: "put",
-      url: "/post/addView",
-      headers: {
-        "content-type": "application/json",
-      },
-      params: {
-        id: id,
-      },
-    })
-      .then((response) => {
-        console.log(response.data);
-        getPost();
-      })
-      .catch((error) => {
-        setErrorMessage(error.response.data.message);
-        setTimeout(() => setErrorMessage(""), 2000);
-        setLoading(false);
-      });
-  }, []);
-
-
+  
   const changeForm = (event) => {
     setComment(event.target.value);
     console.log(comment);
@@ -138,7 +143,6 @@ const PostPageComponent = ({ id }) => {
 
   
   const changeLike =  () => {
-    const postLikes = post.likes
     try {
       const buttons = document.getElementsByTagName("button");
       for (const button of buttons) {
@@ -151,7 +155,7 @@ const PostPageComponent = ({ id }) => {
           idPost: id,
           idUser: userId,
         },
-      }).then((response) => {
+      }).then(function (response) {
         setLike(response.data.like);
         console.log(countLike)
         if (response.data.like)
@@ -194,12 +198,12 @@ const PostPageComponent = ({ id }) => {
           userId: userId,
           comment: comment,
         },
-      }).then((response) => {
+      }).then(function (response) {
         document.getElementById("inputs").reset();
         getComments("");
         setComment("");
       });
-      getPost();
+      getComments();
     } catch (error) {
       console.log(error);
       setErrorMessage(error.response.data.message);
@@ -245,7 +249,7 @@ const PostPageComponent = ({ id }) => {
                     <path d="M8 2.5A8.11 8.11 0 0 0 0 8a8.11 8.11 0 0 0 8 5.5A8.11 8.11 0 0 0 16 8a8.11 8.11 0 0 0-8-5.5zm5.4 7.5A6.91 6.91 0 0 1 8 12.25 6.91 6.91 0 0 1 2.6 10a7.2 7.2 0 0 1-1.27-2A7.2 7.2 0 0 1 2.6 6 6.91 6.91 0 0 1 8 3.75 6.91 6.91 0 0 1 13.4 6a7.2 7.2 0 0 1 1.27 2 7.2 7.2 0 0 1-1.27 2z" />
                   </svg>
 
-                  <div className="num">{view}</div>
+                  <div className="num">{post.views}</div>
                 </li>
                 <li className="icon li">
                   <svg viewBox="0 0 32 32">

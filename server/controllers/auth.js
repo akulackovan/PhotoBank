@@ -2,6 +2,7 @@ import User from '../models/User.js'
 import City from '../models/City.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import path from 'path'
 
 /** Регистрация пользователя */
 export const register = async (req, res) => {
@@ -113,8 +114,18 @@ export const getAnother = async (req, res) => {
         const {myId, userId} = req.query
         console.log(myId + " " + userId)
         /** Поиск пользователей */
-        const user = await User.findOne({_id: userId})
-        const me = await User.findOne({_id: myId})
+        try{
+            let user = await User.findOne({_id: userId})
+            let me = await User.findOne({_id: myId})
+        }
+        catch (error) {
+            if (userId && myId){
+                return res.status(404).json({
+                    message: 'Такого пользователя не существует.',
+                })
+            }
+        }
+        
         if (!user) {
             return res.status(404).json({
                 message: 'Такого пользователя не существует.',
@@ -225,6 +236,12 @@ export const search = async (req, res) => {
     try {
         /** Получение параметра */
         const {name} = req.query
+        if (!name) {
+            return res.status(400).json({
+                message: 'Запрос для поиска пустой',
+            })
+        }
+
         /** Поиск */
         const search = await User.find({"username": {$regex: `${name}`, $options: 'ix'}})
         if (!search) {
