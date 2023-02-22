@@ -114,8 +114,18 @@ export const getAnother = async (req, res) => {
         const {myId, userId} = req.query
         console.log(myId + " " + userId)
         /** Поиск пользователей */
-        const user = await User.findOne({_id: userId})
-        const me = await User.findOne({_id: myId})
+        try{
+            let user = await User.findOne({_id: userId})
+            let me = await User.findOne({_id: myId})
+        }
+        catch (error) {
+            if (userId && myId){
+                return res.status(404).json({
+                    message: 'Такого пользователя не существует.',
+                })
+            }
+        }
+        
         if (!user) {
             return res.status(404).json({
                 message: 'Такого пользователя не существует.',
