@@ -94,7 +94,7 @@ export const login = async (req, res) => {
                 id: user._id,
             },
             process.env.JWT_SECRET,
-            {expiresIn: '1h'},
+            {expiresIn: 1000*20},
         )
 
         res.json({
@@ -115,8 +115,8 @@ export const getAnother = async (req, res) => {
         console.log(myId + " " + userId)
         /** Поиск пользователей */
         try{
-            let user = await User.findOne({_id: userId})
-            let me = await User.findOne({_id: myId})
+            var user = await User.findOne({_id: userId})
+            var me = await User.findOne({_id: myId})
         }
         catch (error) {
             if (userId && myId){
