@@ -124,9 +124,18 @@ export const AnotherPage = ({ id }) => {
     return <Loader />;
   }
 
+
+  if(error){
+    return(
+      <ErrorMessage msg={error}/>
+    )
+  }
+
+
+
   return (
     <div className="profile">
-      {!error && <div><div className="header">
+      <div className="header">
         <div className="first">
           <img className="img" src={user.userProfileImage} />
         </div>
@@ -200,8 +209,8 @@ export const AnotherPage = ({ id }) => {
       </div>
       
       <hr className="hr center" style={{ margin: "0 auto 50px auto" }} />
-      </div>}
-      {error && <ErrorMessage msg={error}/>}
+      
+      
     </div>
     
   );
