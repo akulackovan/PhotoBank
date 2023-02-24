@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Loader from "../Loader/Loader";
 import { Link } from "react-router-dom";
-import  AuthContext  from "../../context/AuthContext";
+import AuthContext from "../../context/AuthContext";
 import "./PostPage.scss";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
@@ -12,6 +12,7 @@ const PostPageComponent = ({ id }) => {
 
   const [loadingComm, setLoadingComm] = useState(true);
   const [error, setErrorMessage] = useState("");
+  const [postError, setPostError] = useState("");
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState({
     length: 0,
@@ -21,42 +22,11 @@ const PostPageComponent = ({ id }) => {
   const [countLike, setCountLike] = useState();
   console.log(userId);
 
-//Добавить просмотр + данные о посте
-useEffect(() => {
-  axios({
-    method: "put",
-    url: "/post/addView",
-    headers: {
-      "content-type": "application/json",
-    },
-    params: {
-      id: id,
-    },
-  })
-    .then(function (response){
-      console.log(response)
-      getPost();
-    })
-    .catch( function (error) {
-      console.log(error)
-      setErrorMessage(error.response.data.message);
-      if (error.response.data.message != "Поста не существует")
-      {
-        setTimeout(() => setErrorMessage(""), 2000);
-      }
-      
-      setLoading(false);
-    });
-}, []);
-
-
-
-
-  //Получаем комментарии к посту
-  const getComments = () => {
+  //Добавить просмотр + данные о посте
+  useEffect(() => {
     axios({
-      method: "get",
-      url: "/post/comments",
+      method: "put",
+      url: "/post/addView",
       headers: {
         "content-type": "application/json",
       },
@@ -64,7 +34,30 @@ useEffect(() => {
         id: id,
       },
     })
-      .then( function (response) {
+      .then((response) => {
+        console.log(response);
+        getPost();
+      })
+      .catch((error) => {
+        console.log(error);
+        setPostError(error.response.data.message);
+        setLoading(false);
+      });
+  }, []);
+
+  //Получаем комментарии к посту
+  const getComments = () => {
+    axios( {
+      method: "get",
+      url: "/post/comments", 
+      headers: {
+        "content-type": "application/json",
+      },
+      params: {
+        id: id
+      },
+    })
+      .then((response) => {
         console.log(response.data);
         if (response.data.total.length == 0) {
           setComments({ length: 0 });
@@ -72,10 +65,10 @@ useEffect(() => {
           return;
         }
         setComments(response.data.total);
-        
         setLoadingComm(false);
       })
-      .catch(function (error) {
+      .catch((error) => {
+        setLoadingComm(false);
         setErrorMessage(error.response.data.message);
         setTimeout(() => setErrorMessage(""), 2000);
       });
@@ -90,13 +83,12 @@ useEffect(() => {
       },
       params: {
         id: id,
-        user: userId
+        user: userId,
       },
     })
-      .then(function (response) {
+      .then((response) => {
         console.log(response.data.isPost);
         setPost(response.data.isPost);
-        setLoading(false);
         axios({
           method: "get",
           url: "/post/getLike",
@@ -108,47 +100,42 @@ useEffect(() => {
             idPost: id,
           },
         })
-          .then(function (responseLike) {
+          .then((responseLike) => {
             setLike(responseLike.data.like);
-            console.log("Like2"+ like);
-            console.log(response.data.isPost.likes)
-            if (responseLike.data.like)
-            {
-              setCountLike(response.data.isPost.likes)
+            if (responseLike.data.like) {
+              setCountLike(response.data.isPost.likes);
+            } else {
+              setCountLike(response.data.isPost.likes + 1);
             }
-            else {
-              setCountLike(response.data.isPost.likes + 1)
-            }
+            getComments();
+            setLoading(false);
           })
-          .catch(function (error) {
-            setErrorMessage(error.response.data.message);
-            setTimeout(() => setErrorMessage(""), 2000);
-            return
+          .catch((error) => {
+            setLoading(false);
+            setPostError(error.response.data.message);
+            
+            return;
           });
-        console.log(countLike)
-        getComments();
       })
-      .catch(function (error) {
-        setErrorMessage(error.response.data.message);
-        setTimeout(() => setErrorMessage(""), 2000);
+      .catch((error) => {
+        setLoading(false);
+        setPostError(error.response.data.message);
       });
-      console.log("Like" + like)
+    console.log("Like" + like);
   };
 
-  
   const changeForm = (event) => {
     setComment(event.target.value);
     console.log(comment);
   };
 
-  
-  const changeLike =  () => {
+  const changeLike = () => {
     try {
       const buttons = document.getElementsByTagName("button");
       for (const button of buttons) {
         button.disabled = true;
       }
-       axios({
+      axios({
         method: "put",
         url: "/post/setLike",
         params: {
@@ -157,21 +144,19 @@ useEffect(() => {
         },
       }).then(function (response) {
         setLike(response.data.like);
-        console.log(countLike)
-        if (response.data.like)
-        {
-          setPost({...post, likes: countLike})
-        }
-        else{
-          setPost({...post, likes: countLike - 1})
+        console.log(countLike);
+        if (response.data.like) {
+          setPost({ ...post, likes: countLike });
+        } else {
+          setPost({ ...post, likes: countLike - 1 });
         }
       });
     } catch (error) {
       console.log(error);
       setErrorMessage(error.response.data.message);
       setTimeout(() => setErrorMessage(""), 2000);
+      setLoading(false);
     }
-
   };
 
   const commentHandler = async () => {
@@ -200,10 +185,13 @@ useEffect(() => {
         },
       }).then(function (response) {
         document.getElementById("inputs").reset();
-        getComments("");
+        console.log(response)
+        console.log(comments)
+        setComments([{user: response.data.newComment.user, comment: comment}, ...comments])
         setComment("");
+        console.log(comments)
+        setLoadingComm(false);
       });
-      getComments();
     } catch (error) {
       console.log(error);
       setErrorMessage(error.response.data.message);
@@ -215,6 +203,10 @@ useEffect(() => {
     return <Loader />;
   }
 
+  if (postError) {
+    return <ErrorMessage msg={postError} />;
+  }
+
   return (
     <div className="allPost">
       {error && <ErrorMessage msg={error} />}
@@ -223,12 +215,12 @@ useEffect(() => {
           <div className="one">
             <div className="container">
               <div>
-                <Link
-                  to={`/profile/${post.author._id}`}
+                <a
+                  href={`/profile/${post.author._id}`}
                   title={`Автор: ${post.author.username}`}
                 >
                   <h4 className="head">{post.author.username}</h4>
-                </Link>
+                </a>
               </div>
               <div className="under">
                 <div className="date">
@@ -282,10 +274,11 @@ useEffect(() => {
             <div className="comment">
               {!like && (
                 <button
+                data-testid="like"
                   className="like icon"
                   title="Поставить лайк"
                   onClick={changeLike}
-                  id = "like"
+                  id="like"
                 >
                   <svg
                     width="50px"
@@ -302,10 +295,11 @@ useEffect(() => {
               )}
               {like && (
                 <button
+                data-testid="like"
                   className="dislike icon"
                   title="Отменить лайк"
                   onClick={changeLike}
-                  id = "unlike"
+                  id="unlike"
                 >
                   <svg
                     width="50px"
@@ -353,7 +347,7 @@ useEffect(() => {
                   <ul>
                     {comments.map((item) => (
                       <div>
-                        <li className="container">
+                        <li className="container" data-testid="comment">
                           <h5>{item.user}</h5>
                           <p>{item.comment}</p>
                         </li>
