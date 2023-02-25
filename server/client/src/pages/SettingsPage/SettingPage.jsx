@@ -12,6 +12,7 @@ import { Gapped, Radio, RadioGroup } from "@skbkontur/react-ui";
 const SettingsPage = () => {
   const { logout } = useContext(AuthContext);
   const { userId } = useContext(AuthContext);
+  const [disabled, setDisabled] = useState(false)
   const [form, setForm] = useState({
     userId: userId,
     username: "",
@@ -22,7 +23,7 @@ const SettingsPage = () => {
     city: "",
     base64: "",
   });
-  const [isOut, setOut] = useState(false)
+  
  
   const [errorMessage, setErrorMessage] = React.useState("");
   const [log, setLog] = React.useState(false);
@@ -48,34 +49,39 @@ const SettingsPage = () => {
   };
 
   const settingsHandler = async () => {
-    if (form.username != "" && !form.username.match(/^[A-Za-zА-Яа-я]+$/)) {
+    var username = document.getElementById("username").value
+    var newpass = document.getElementById("newpass").value
+    var password = document.getElementById("password").value
+    var checkpass = document.getElementById("checkpass").value
+    var text = document.getElementById("text").value
+    if (username != "" && !username.match(/^[A-Za-zА-Яа-я]+$/)) {
       setErrorMessage(
         "Имя пользователя должно содержать только символы русского и английского алфавита"
       );
       setTimeout(() => setErrorMessage(""), 2000);
       return;
     }
-    if (!(form.username.length <= 128)) {
+    if (!(username.length <= 128)) {
       setErrorMessage("Имя пользователя должно быть меньше 128 символов");
       setTimeout(() => setErrorMessage(""), 2000);
       return;
     }
-    if (form.newpass && !form.password) {
+    if (newpass && !password) {
       setErrorMessage("Не введен старый пароль");
       setTimeout(() => setErrorMessage(""), 2000);
       return;
     }
-    if (form.password && !form.newpass) {
+    if (password && !newpass) {
       setErrorMessage("Не введен новый пароль");
       setTimeout(() => setErrorMessage(""), 2000);
       return;
     }
-    if (!form.checkpass && form.newpass) {
+    if (!checkpass && newpass) {
       setErrorMessage("Подтверждение пароля не введено");
       setTimeout(() => setErrorMessage(""), 2000);
       return;
     }
-    if (form.newpass != "" && !form.newpass.match(/^[A-Za-zА-Яа-я]+$/)) {
+    if (newpass != "" && !newpass.match(/^[A-Za-zА-Яа-я]+$/)) {
       setErrorMessage(
         "Пароль должен содержать только символы русского и английского алфавита"
       );
@@ -83,7 +89,7 @@ const SettingsPage = () => {
       return;
     }
     
-    if (!(form.newpass.length <= 128)) {
+    if (!(newpass.length <= 128)) {
       setErrorMessage("Пароль должен быть меньше 128 символов");
       setTimeout(() => setErrorMessage(""), 2000);
       return;
@@ -93,16 +99,18 @@ const SettingsPage = () => {
       setTimeout(() => setErrorMessage(""), 2000);
       return;
     }
-    if (!(form.checkpass == form.newpass)) {
+    if (!(checkpass == newpass)) {
       setErrorMessage("Пароли не совпадают");
       setTimeout(() => setErrorMessage(""), 2000);
       return;
     }
-    if (!(form.text.length < 512)) {
+    if (!(text.length < 512)) {
       setErrorMessage("Описание должно быть меньше 512 символов");
       setTimeout(() => setErrorMessage(""), 2000);
       return;
     }
+    setDisabled(true)
+    setForm({...form, username: username, password: password, checkpass: checkpass, newpass: newpass, text: text})
     try {
       await axios
         .post(
@@ -131,11 +139,13 @@ const SettingsPage = () => {
             city: "",
             base64: "",
           });
+          setDisabled(false)
         });
     } catch (error) {
       console.log(error);
       setErrorMessage(error.response.data.message);
       setTimeout(() => setErrorMessage(""), 2000);
+      setDisabled(false)
     }
   };
 
@@ -156,6 +166,7 @@ const SettingsPage = () => {
                 placeholder="Логин"
                 name="username"
                 onChange={changeForm}
+                id="username"
               />
               <input
                 className="input"
@@ -163,6 +174,7 @@ const SettingsPage = () => {
                 name="password"
                 type="password"
                 onChange={changeForm}
+                id="password"
               />
               <input
                 className="input"
@@ -170,6 +182,7 @@ const SettingsPage = () => {
                 placeholder="Новый пароль"
                 name="newpass"
                 onChange={changeForm}
+                id="newpass"
               />
               <input
                 className="input"
@@ -177,6 +190,7 @@ const SettingsPage = () => {
                 placeholder="Подтверждение нового пароля"
                 name="checkpass"
                 onChange={changeForm}
+                id="checkpass"
               />
             </div>
             <div className="sec" style={{ textAlign: "left" }}>
@@ -186,11 +200,13 @@ const SettingsPage = () => {
                 placeholder="Описание пользователя"
                 name="text"
                 onChange={changeForm}
+                id="text"
               />
               <CityCombobox
                 name="city"
                 onChange={(value) => setForm({ ...form, city: value })}
                 key={formKey}
+                disabled={disabled}
               />
             </div>
           </div>
@@ -201,13 +217,16 @@ const SettingsPage = () => {
             <Gapped horizontal gap={0} >
               <b>Тема: </b>
               <Radio
+                data-testid="light-button"
                 className="radio"
                 value="light"
                 onChange={changeTheme}
                 style={{color: 'black'}}
+                
               />{" "}
               <b>Светлая</b>
               <Radio
+                data-testid="dark-button"
                 className="radio"
                 value="dark"
                 onChange={changeTheme}
@@ -221,13 +240,14 @@ const SettingsPage = () => {
           <Cropper
             setData={(value) => setForm({ ...form, base64: value })}
             key={formKey}
+            disabled={disabled}
             />
         </div>
         <div className="buttons">
-          <button className="button" onClick={settingsHandler}>
+          <button className="button" onClick={settingsHandler} disabled={disabled}>
             СОХРАНИТЬ
           </button>
-          <button className="button" onClick={changeOut}>
+          <button className="button" onClick={changeOut} disabled={disabled}>
             ВЫЙТИ ИЗ АККАУНТА
           </button>
         </div>

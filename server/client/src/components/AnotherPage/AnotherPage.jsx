@@ -22,7 +22,7 @@ export const AnotherPage = ({ id }) => {
   const [isSubscription, setSubscriptions] = useState(false);
   //Колесо загрузки
   const [loader, setLoader] = useState(true);
-
+  const [disabled, setDisabled] = useState(false)
   const [error, setErrorMessage] = useState()
 
   const [sub, setSub] = useState()
@@ -32,6 +32,7 @@ export const AnotherPage = ({ id }) => {
 
   //** Подписка */
   const subscribe = async () => {
+    setDisabled(true)
     try {
       await axios
         .post("/auth/subscribe", {
@@ -45,16 +46,18 @@ export const AnotherPage = ({ id }) => {
         })
         .then((response) => {
           console.log("GO");
-
+          //ЗДЕСЬ тест
           if (response.data.isSubs) {
             console.log("Update");
             setUser({ ...user, subscriptions: sub});
           } else {
             setUser({ ...user, subscriptions: sub - 1});
           }
+          setDisabled(false)
         });
     } catch (error) {
       console.log(error);
+      setDisabled(false)
     }
   };
 
@@ -73,7 +76,6 @@ export const AnotherPage = ({ id }) => {
           myId: userId,
         },
       }).then((response) => {
-        console.log("HEEEE" + response.data.user.image);
         setUser({
           username: response.data.user.username,
           text: response.data.user.text,
@@ -93,6 +95,9 @@ export const AnotherPage = ({ id }) => {
         setLoader(false);
       }).catch((error)=>{
         setErrorMessage(error.response.data.message)
+        if (error.response.data.message === "Нет доступа"){
+          setErrorMessage("Пользователь не найден")
+        }
         setLoader(false)
       })
     } else {
@@ -107,7 +112,7 @@ export const AnotherPage = ({ id }) => {
         params: {
           userId: userId,
         },
-      }).then((response) => {
+      }).then((response) => { //ЗДЕСЬ Тест
         console.log("Profile: " + response.data.user);
         setUser({
           username: response.data.user.username,
@@ -116,6 +121,9 @@ export const AnotherPage = ({ id }) => {
           userProfileImage: response.data.user.image,
         });
         setLoader(false);
+      }).catch((error)=>{
+        console.log(error)
+        setErrorMessage(error.response.data.message)
       });
     }
   }, []);
@@ -141,7 +149,7 @@ export const AnotherPage = ({ id }) => {
         </div>
         <div className="second container">
           <div className="header">
-            <div className="user">{user.username}</div>
+            <div className="user " data-testid="post-user">{user.username}</div>
             {id != userId && <div className="city head">г.{user.city}</div>}
           </div>
           <div className="text">
@@ -166,6 +174,7 @@ export const AnotherPage = ({ id }) => {
                         subscribe();
                       }}
                       title="Подписаться"
+                      disabled={disabled}
                     >
                       Подписаться
                     </button>
@@ -179,6 +188,7 @@ export const AnotherPage = ({ id }) => {
                         subscribe();
                       }}
                       title="Отписаться"
+                      disabled={disabled}
                     >
                       Отписаться
                     </button>
@@ -195,7 +205,7 @@ export const AnotherPage = ({ id }) => {
                 </div>
                 <div>
                   <Link to="post">
-                    <button className="button">Добавить фото</button>
+                    <button className="button" disabled={disabled}>Добавить фото</button>
                   </Link>
                 </div>
               </div>
@@ -205,7 +215,7 @@ export const AnotherPage = ({ id }) => {
       </div>
       <hr className="hr" />
       <div>
-        <PostUser id={id} />
+        <PostUser id={id} disabled={disabled}/>
       </div>
       
       <hr className="hr center" style={{ margin: "0 auto 50px auto" }} />
