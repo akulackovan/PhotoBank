@@ -45,7 +45,7 @@ export const AnotherPage = ({ id }) => {
         })
         .then((response) => {
           console.log("GO");
-
+          //ЗДЕСЬ тест
           if (response.data.isSubs) {
             console.log("Update");
             setUser({ ...user, subscriptions: sub});
@@ -73,7 +73,6 @@ export const AnotherPage = ({ id }) => {
           myId: userId,
         },
       }).then((response) => {
-        console.log("HEEEE" + response.data.user.image);
         setUser({
           username: response.data.user.username,
           text: response.data.user.text,
@@ -107,7 +106,7 @@ export const AnotherPage = ({ id }) => {
         params: {
           userId: userId,
         },
-      }).then((response) => {
+      }).then((response) => { //ЗДЕСЬ Тест
         console.log("Profile: " + response.data.user);
         setUser({
           username: response.data.user.username,
@@ -116,6 +115,9 @@ export const AnotherPage = ({ id }) => {
           userProfileImage: response.data.user.image,
         });
         setLoader(false);
+      }).catch((error)=>{
+        console.log(error)
+        setErrorMessage(error.response.data.message)
       });
     }
   }, []);
@@ -141,7 +143,7 @@ export const AnotherPage = ({ id }) => {
         </div>
         <div className="second container">
           <div className="header">
-            <div className="user">{user.username}</div>
+            <div className="user" data-testid="post-user">{user.username}</div>
             {id != userId && <div className="city head">г.{user.city}</div>}
           </div>
           <div className="text">

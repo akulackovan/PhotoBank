@@ -23,7 +23,7 @@ export const getPostById = async (req, res) => {
     const city = await City.findOne({ _id: isPost.city });
     isPost.city = city;
 
-    return res.json({
+    return res.status(200).json({
       isPost,
 
       message: "Пост получен",
@@ -52,7 +52,7 @@ export const getMyPost = async (req, res) => {
       });
     }
 
-    return res.json({
+    return res.status(200).json({
       isPost,
       message: "Посты пользователя получены",
     });
@@ -131,7 +131,6 @@ export const getLike = async (req, res) => {
 
 export const addView = async (req, res) => {
   try {
-    try {
       var post = await Post.findById(req.query.id);
 
       if (!post) {
@@ -139,13 +138,7 @@ export const addView = async (req, res) => {
           message: "Поста не существует",
         });
       }
-    } catch {
-      if (req.query.id) {
-        return res.status(400).json({
-          message: "Поста не существует",
-        });
-      }
-    }
+    
     await Post.updateOne({ _id: req.query.id }, { views: post.views + 1 });
     res.status(200).json({
       message: "Успешно",

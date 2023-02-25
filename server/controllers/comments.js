@@ -13,6 +13,11 @@ export const createComment = async (req, res) => {
             return res.status(418).json({ message: 'Неверный пользователь' })
         }
 
+        const isPost = await Post.findOne({ _id: postId })
+        if (!isPost) {
+            return res.status(418).json({ message: 'Пост не найден' })
+        }
+
         /** Дополнительная проверка на пустой комментарий */
         if (!comment)
             return res.status(418).json({ message: 'Комментарий не может быть пустым' })
@@ -26,7 +31,7 @@ export const createComment = async (req, res) => {
             $push: { comments: newComment._id },
         })
         
-        res.status(201).json({
+        return res.status(201).json({
             newComment: {user: isUser.username, comment: comment},
             message: 'Успешно созданный комментарий',
         })

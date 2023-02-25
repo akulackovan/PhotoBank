@@ -50,7 +50,7 @@ export const register = async (req, res) => {
             {
                 id: newUser._id,
             },
-            process.env.JWT_SECRET,
+            '0a6b944d-d2fb-46fc-a85e-0295c986cd9f',
             {expiresIn: '30d'},
         )
 
@@ -93,11 +93,12 @@ export const login = async (req, res) => {
             {
                 id: user._id,
             },
-            process.env.JWT_SECRET,
+            "0a6b944d-d2fb-46fc-a85e-0295c986cd9f",
             {expiresIn: 1000*20},
         )
+        user.password = ""
 
-        res.json({
+        res.status(201).json({
             token,
             user,
             message: 'Успешный вход в систему.',
@@ -114,19 +115,11 @@ export const getAnother = async (req, res) => {
         const {myId, userId} = req.query
         console.log(myId + " " + userId)
         /** Поиск пользователей */
-        try{
             var user = await User.findOne({_id: userId})
             var me = await User.findOne({_id: myId})
-        }
-        catch (error) {
-            if (userId && myId){
-                return res.status(404).json({
-                    message: 'Такого пользователя не существует.',
-                })
-            }
-        }
+
         
-        if (!user) {
+        if (!user || !me) {
             return res.status(404).json({
                 message: 'Такого пользователя не существует.',
             })
@@ -147,7 +140,7 @@ export const getAnother = async (req, res) => {
         //** Количество подписчиков */
         const subscibe = await User.find({subscriptions: userId})
 
-        res.json({
+        return res.status(201).json({
             user,
             subscibe,
             city:city.city,
@@ -176,7 +169,7 @@ export const getMe = async (req, res) => {
         /** Количество подписчиков */
         const subscibe = await User.find({subscriptions: req.query.userId})
 
-        res.json({
+        return res.status(201).json({
             user,
             subscibe,
             message: 'Профиль успешен',
@@ -221,7 +214,7 @@ export const subscibe = async (req, res) => {
             isSubs = true
         }
 
-        res.json({
+        return res.status(201).json({
             isSubs,
             message: 'Изменение состояние подписки одного пользователя на другого',
         })

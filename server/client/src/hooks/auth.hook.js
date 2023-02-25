@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
-export const useAuth = () => {
+export function useAuth () {
   const [token, setToken] = useState(0);
   const [userId, setUserId] = useState(0);
 
