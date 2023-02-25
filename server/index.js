@@ -21,17 +21,14 @@ app.use('/settings', settingRoute)
 app.use('/post', postRoute)
 app.use('/city', cityRoute)
 
-
 async function init() {
     try {
         await mongoose.connect(
             `mongodb+srv://admin:admin@test.qidx0uu.mongodb.net/?retryWrites=true&w=majority`,
         )
-
         app.listen(PORT, () => {
             console.log("Start server on port", PORT)
         })
-
     }
     catch(err)
     {
