@@ -12,6 +12,6 @@ router.post('/subscribe', subscibe) //Изменение подписки
 router.get('/search', search) //Поиск
 router.get('/user', getAnother) //Получение другого пользвателя
 
-router.get('/getSub', getSubsribeUsers) //Получение другого пользвателя
+router.get('/getSub', getSubsribeUsers) //Получение подписок
 
 export default router
