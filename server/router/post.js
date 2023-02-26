@@ -28,7 +28,7 @@ router.get('/subscription', getSubscriptionPosts)
 router.put('/addView', addView)
 router.put('/setLike', setLike)
 
-router.put('/post', rePost)
-router.get('/getAllPost', getAllPost)
+//router.put('/post', rePost)
+//router.get('/getAllPost', getAllPost)
 
 export default router
