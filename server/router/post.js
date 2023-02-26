@@ -5,7 +5,7 @@ import {createPost} from "../controllers/postController.js";
 import {getSubscriptionPosts} from "../controllers/getSubscriptionPosts.js";
 import {getPostById, getMyPost, getPostComments, getLike, addView, setLike } from '../controllers/post.js'
 import {createComment} from '../controllers/comments.js'
-import {rePost, getAllPost} from "../controllers/dops.js"
+//import {rePost, getAllPost} from "../controllers/dops.js"
 
 router.post('/post', createPost) //создание поста
 

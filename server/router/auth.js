@@ -1,6 +1,6 @@
 import {Router} from "express"
 import {getMe, login, register, subscibe, search, getAnother } from '../controllers/auth.js'
-import {getSubsribeUsers} from '../controllers/sub.js'
+//import {getSubsribeUsers} from '../controllers/sub.js'
 
 const router = new Router()
 
