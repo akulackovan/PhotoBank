@@ -49,7 +49,9 @@
     "react-widgets": "^5.8.4",
     "reactstrap": "^9.1.5",
     "sass": "^1.57.1",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.1"
   },
   "devDependencies": {
     "@babel/plugin-proposal-logical-assignment-operators": "^7.20.7",
