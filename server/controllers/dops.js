@@ -18,7 +18,6 @@ export const rePost = async (req, res) => {
 
 export const getAllPost = async (req, res) => {
     try {
-        const {postId, text} = req.body;
         const post = await Post.find();
         if (!post){
             return res.status(404).json({message: "Постов нет", posts: post})
