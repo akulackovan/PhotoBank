@@ -97,7 +97,7 @@ const SettingsPage = () => {
     }
     
     if (!(newpass.length <= 128)) {
-      setErrorMessage("Пароль должен содержать до 128 символов");
+      setErrorMessage("Новый пароль должен содержать до 128 символов");
       setTimeout(() => setErrorMessage(""), 2000);
       return;
     }
