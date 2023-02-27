@@ -42,7 +42,6 @@ const Search = ({ id }) => {
           <h2 className="head">По запросу "{id}" найдено:</h2>
           {search && (
             <div className="container">
-              <hr className="hr" />
               <div className="search">
                 <ul>
                   {search.map((item) => (
@@ -54,7 +53,6 @@ const Search = ({ id }) => {
                         <h5 style={{ overflowWrap: "break-word" }}>
                           {item.username}
                         </h5>
-                        <hr className="hr" />
                       </a>
                     </li>
                   ))}
