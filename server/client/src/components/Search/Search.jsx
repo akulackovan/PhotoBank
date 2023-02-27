@@ -37,10 +37,8 @@ const Search = ({ id }) => {
 
   return (
     <div className="searchUser container">
-      <h2 className="head">По запросу "{id}" найдено:</h2>
       {id && (
         <div>
-          
           {search && (
             <div className="container">
               <div className="search">
